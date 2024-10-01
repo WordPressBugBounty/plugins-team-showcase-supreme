@@ -626,8 +626,8 @@ $total_template = 3;
                               ?>
                                     <div class="skills-info">
                                        <input type="text" name="skills_name[]" class="wpm-form-input skills-name" value="<?php echo wpm_6310_replace($skill[0]) ?>" placeholder="Enter Skills Name">
-                                       <input name="skills_rating[]" type="range" step="1" min="20" max="100" value="<?php echo wpm_6310_replace($skill[1]) ?>" data-rangeSlider title="">
-                                       <output><?php echo wpm_6310_replace($skill[1]) ?></output><span><button type="button" class="wpm-btn-danger sm wpm_6310_skills_remove" value="Remove"><i class="far fa-times-circle" aria-hidden="true"></i></button></span>
+                                       <input name="skills_rating[]" type="range" step="1" min="0" max="100" value="<?php echo $skill[1] ?>" data-rangeSlider title="">
+                                       <output><?php echo $skill[1] ?></output><span><button type="button" class="wpm-btn-danger sm wpm_6310_skills_remove" value="Remove"><i class="far fa-times-circle" aria-hidden="true"></i></button></span>
                                     </div>
                                  <?php
                                  }
@@ -638,7 +638,7 @@ $total_template = 3;
                               ?>
                                  <div class="skills-info">
                                     <input type="text" name="skills_name[]" class="wpm-form-input skills-name" placeholder="Enter Skills Name">
-                                    <input name="skills_rating[]" type="range" step="1" min="20" max="100" data-rangeSlider title="">
+                                    <input name="skills_rating[]" type="range" step="1" min="0" max="100" data-rangeSlider title="">
                                     <output></output><span><button type="button" class="wpm-btn-danger sm wpm_6310_skills_remove" value="Remove"><i class="far fa-times-circle" aria-hidden="true"></i></button></span>
                                  </div>
                               <?php
@@ -1507,7 +1507,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                            </label>
                            <div class="skills-info">
                               <input type="text" name="skills_name[]" class="wpm-form-input skills-name" placeholder="Enter Skills Name">
-                              <input name="skills_rating[]" type="range" step="1" min="20" max="100" value="90" data-rangeSlider title="">
+                              <input name="skills_rating[]" type="range" step="1" min="0" max="100" value="90" data-rangeSlider title="">
                               <output>90</output><span><button type="button" class="wpm-btn-danger sm wpm_6310_skills_remove" value="Remove"><i class="far fa-times-circle" aria-hidden="true"></i></button></span>
                            </div>
                         </div>
@@ -1830,7 +1830,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
 
       /* Skills New */
       jQuery("body").on("click", ".wpm_6310_skills_new", function(e) {
-         var html = '<div class="skills-info"><input type="text" name="skills_name[]" class="wpm-form-input skills-name" placeholder="Enter Skills Name"><input name="skills_rating[]" type="range" step="1" min="20" max="100" value="90" data-rangeSlider title="">&nbsp;<output>90</output><span><button type="button" class="wpm-btn-danger sm wpm_6310_skills_remove" value="Remove"><i class="far fa-times-circle" aria-hidden="true"></i></button></span></div>';
+         var html = '<div class="skills-info"><input type="text" name="skills_name[]" class="wpm-form-input skills-name" placeholder="Enter Skills Name"><input name="skills_rating[]" type="range" step="1" min="0" max="100" value="90" data-rangeSlider title="">&nbsp;<output>90</output><span><button type="button" class="wpm-btn-danger sm wpm_6310_skills_remove" value="Remove"><i class="far fa-times-circle" aria-hidden="true"></i></button></span></div>';
          jQuery("body").css({
             "overflow": "hidden"
          });
@@ -1860,7 +1860,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
 
          /* Skills Edit */
       jQuery("body").on("click", ".wpm_6310_skills_new-edit", function(e) {
-         var html = '<div class="skills-info"><input type="text" name="skills_name[]" class="wpm-form-input skills-name" placeholder="Enter Skills Name"><input name="skills_rating[]" type="range" step="1" min="20" max="100" value="90" data-rangeSlider title="">&nbsp;<output>90</output><span><button type="button" class="wpm-btn-danger sm wpm_6310_skills_remove" value="Remove"><i class="far fa-times-circle" aria-hidden="true"></i></button></span></div>';
+         var html = '<div class="skills-info"><input type="text" name="skills_name[]" class="wpm-form-input skills-name" placeholder="Enter Skills Name"><input name="skills_rating[]" type="range" step="1" min="0" max="100" value="90" data-rangeSlider title="">&nbsp;<output>90</output><span><button type="button" class="wpm-btn-danger sm wpm_6310_skills_remove" value="Remove"><i class="far fa-times-circle" aria-hidden="true"></i></button></span></div>';
          jQuery("body").css({
             "overflow": "hidden"
          });

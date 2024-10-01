@@ -397,8 +397,8 @@ function wpm_6310_team_member_details()
                   $skillStr .= "<div class='wpm_6310_skills_label_".esc_attr($styleId)."'>".wpm_6310_multi_language_get('skills', $skill[0])."</div>";
                   $skillStr .= "
                      <div class='wpm_6310_skills_prog_".esc_attr($styleId)."'>
-                        <div class='wpm_6310_fill_".esc_attr($styleId)." fill-".esc_attr($styleId)."-".esc_attr($skl)."' data-progress-animation='".esc_attr($skill[1])."%' data-appear-animation-delay='400' style='width: ".wpm_6310_replace($skill[1])."%'>
-												<div class='wpm-6310-tooltip-percent'>".wpm_6310_replace($skill[1])."%</div>
+                        <div class='wpm_6310_fill_".esc_attr($styleId)." fill-".esc_attr($styleId)."-".esc_attr($skl)."' data-progress-animation='".esc_attr($skill[1])."%' data-appear-animation-delay='400' style='width: ".$skill[1]."%'>
+												<div class='wpm-6310-tooltip-percent'>".$skill[1]."%</div>
 												</div>
                      </div>";
                   $skillStr .= "</>";
@@ -540,8 +540,8 @@ function wpm_6310_team_member_info()
 							$skillStr .= "<div class='wpm_6310_member_skills_content'><div class='wpm_6310_skills_label'>".wpm_6310_replace($skill[0])."</div>";
 							$skillStr .= "
 									<div class='wpm_6310_skills_prog'>
-										<div class='wpm_6310_fill fill-".esc_attr($skl)."' data-progress-animation='".esc_attr($skill[1])."%' data-appear-animation-delay='400' style='width: ".wpm_6310_replace($skill[1])."%'>
-										<div class='wpm-6310-tooltip-percent'>".wpm_6310_replace($skill[1])."%</div>
+										<div class='wpm_6310_fill fill-".esc_attr($skl)."' data-progress-animation='".esc_attr($skill[1])."%' data-appear-animation-delay='400' style='width: ".$skill[1]."%'>
+										<div class='wpm-6310-tooltip-percent'>".$skill[1]."%</div>
 										</div>
 									</div>";
 							$skillStr .= "</div>";
