@@ -407,7 +407,7 @@ $total_template = 3;
          $selMember = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $id), ARRAY_A);
          ?>
          <div id="wpm-6310-modal-edit" class="wpm-6310-modal" style="display: none">
-            <div class="wpm-6310-modal-content wpm-6310-modal-md">
+            <div class="wpm-6310-modal-content wpm-6310-modal-lg">
                <form action="" method="post">
                   <?php wp_nonce_field("wpm-6310-nonce-update") ?>
                   <input type="hidden" name="eid" value="<?php echo $id; ?>" />
@@ -456,10 +456,14 @@ $total_template = 3;
                               $selMember['profile_details'] = str_replace("\'", "'", $selMember['profile_details']);
                               $selMember['profile_details'] = str_replace('\"', '"', $selMember['profile_details']);
                               $settings = array(
-                                  'teeny' => TRUE,
-                                  'media_buttons' => false,
-                                  'textarea_rows' => 5
-                              );
+                                 'teeny' => false,  // Set to false to allow full editor capabilities
+                                 'media_buttons' => false,
+                                 'textarea_rows' => 5,
+                                 'tinymce' => array(
+                                     'toolbar1' => 'bold,italic,underline,|,fontsizeselect,forecolor,backcolor,|,alignleft,aligncenter,alignright,|,bullist,numlist,outdent,indent',
+                                     'fontsize_formats' => '10px 12px 14px 16px 18px 24px 36px',
+                                 ),
+                             );
                               wp_editor($selMember['profile_details'], "profile_details_new", $settings);
                               ?>
                            </td>
@@ -1354,7 +1358,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
 
 </table>
 <div id="wpm-6310-modal-add" class="wpm-6310-modal" style="display: none">
-   <div class="wpm-6310-modal-content wpm-6310-modal-md">
+   <div class="wpm-6310-modal-content wpm-6310-modal-lg">
       <form action="" method="post">
          <div class="wpm-6310-modal-header">
             Add Member
@@ -1400,10 +1404,14 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                   <td>
                      <?php
                      $settings = array(
-                         'teeny' => TRUE,
-                         'media_buttons' => false,
-                         'textarea_rows' => 5
-                     );
+                        'teeny' => false,  // Set to false to allow full editor capabilities
+                        'media_buttons' => false,
+                        'textarea_rows' => 5,
+                        'tinymce' => array(
+                            'toolbar1' => 'bold,italic,underline,|,fontsizeselect,forecolor,backcolor,|,alignleft,aligncenter,alignright,|,bullist,numlist,outdent,indent',
+                            'fontsize_formats' => '10px 12px 14px 16px 18px 24px 36px',
+                        ),
+                    );
                      wp_editor("", "profile_details_new", $settings);
                      ?>
                   </td>
@@ -1737,19 +1745,6 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
          jQuery("body").css({
             "overflow": "initial"
          });
-      });
-      jQuery(window).click(function (event) {
-         if (event.target == document.getElementById('wpm-6310-modal-add')) {
-            jQuery("#wpm-6310-modal-add").fadeOut(500);
-            jQuery("body").css({
-               "overflow": "initial"
-            });
-         } else if (event.target == document.getElementById('wpm-6310-modal-edit')) {
-            jQuery("#wpm-6310-modal-edit").fadeOut(500);
-            jQuery("body").css({
-               "overflow": "initial"
-            });
-         }
       });
       /* Modal Close End */
 
