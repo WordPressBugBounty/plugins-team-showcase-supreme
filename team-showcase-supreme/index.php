@@ -8,14 +8,14 @@
   Author URI: http://www.wpmart.org/
   Text Domain: team-showcase-supreme
   Domain Path: /languages
-  Version: 7.2
+  Version: 7.3
  */
 if (!defined('ABSPATH'))
    exit;   
 
 define('wpm_6310_plugin_url', plugin_dir_path(__FILE__));
 define('wpm_6310_plugin_dir_url', plugin_dir_url(__FILE__));
-define ('WPM_PLUGIN_CURRENT_VERSION', 7.2);
+define ('WPM_PLUGIN_CURRENT_VERSION', 7.3);
 define( 'WPM_6310_PLUGIN_LANGUAGE_PATH', dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 add_shortcode('wpm_team_showcase', 'wpm_team_showcase_supreme_shortcode');

@@ -464,7 +464,9 @@ $total_template = 3;
                                      'fontsize_formats' => '10px 12px 14px 16px 18px 24px 36px',
                                  ),
                              );
+                             if (current_user_can('edit_posts')) {
                               wp_editor($selMember['profile_details'], "profile_details_new", $settings);
+                             }
                               ?>
                            </td>
                         </tr>
@@ -1412,7 +1414,9 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                             'fontsize_formats' => '10px 12px 14px 16px 18px 24px 36px',
                         ),
                     );
-                     wp_editor("", "profile_details_new", $settings);
+                    if (current_user_can('edit_posts')) {
+                        wp_editor("", "profile_details_new", $settings);
+                    }
                      ?>
                   </td>
                </tr>
