@@ -75,7 +75,16 @@ if(!$loading){
 $loading_width = wpm_6310_get_option( 'wpm_6310_loading_image_width') > 0 ? wpm_6310_get_option( 'wpm_6310_loading_image_width') : 100;
 $loading_height = wpm_6310_get_option( 'wpm_6310_loading_image_height') > 0 ? wpm_6310_get_option( 'wpm_6310_loading_image_height') : 100;
 
-if (file_exists(wpm_6310_plugin_url . "output/{$styledata['style_name']}.php")) {
+$templates = [];
+for ($i = 1; $i <= 50; $i++) {
+   $templates[] = sprintf('template-%02d', $i); // %02d ensures two digits with leading zero
+}
+$fileUrl = "";
+if (!in_array($styledata['style_name'], $templates, true)) {
+   return;
+}
+
+if (file_exists(wpm_6310_plugin_url . "output/".esc_attr($styledata['style_name']).".php")) {
    $fonts = '';
    $google_font = wpm_6310_get_option( 'wpm_6310_google_font_status');
    if ($google_font != 1) {
@@ -178,7 +187,7 @@ if (file_exists(wpm_6310_plugin_url . "output/{$styledata['style_name']}.php")) 
             wpm_6310_progress_bar_border_radius='". (isset($allSlider[344]) ? $allSlider[344] : 10) ."'
    >";
    echo "<div class='".(($allSlider[0] == 0) ? 'wpm-6310-no-carousel' : '')."'>";
-   include wpm_6310_plugin_url . "output/{$styledata['style_name']}.php";
+   include wpm_6310_plugin_url . "output/".esc_attr($styledata['style_name']).".php";
 
    echo "</div>";
    echo "</div>";
