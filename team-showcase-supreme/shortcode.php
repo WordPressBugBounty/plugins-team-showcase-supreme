@@ -11,9 +11,21 @@ wp_enqueue_script('jquery');
 $categoryData = $wpdb->get_results("SELECT * FROM $category_table order by serial asc", ARRAY_A);
 $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $ids), ARRAY_A);
 if(!$styledata || $styledata == '') return;
-$styleTemplate = (int) substr($styledata['style_name'], -2);
+$template_name = $styledata['style_name'];
+$styleTemplate = (int) substr($template_name, -2);
 $allStyle = explode("|", $styledata['css']);
 $allSlider = explode("|", $styledata['slider']);
+
+$allowed_templates = [];
+for ($i = 1; $i <= 50; $i++) {
+   $allowed_templates[] = sprintf('template-%02d', $i); // Generates template-01, template-02, ..., template-50
+}
+
+
+
+      if (!in_array($template_name, $allowed_templates)) {
+         die('Invalid template selected.');
+      }
 
 
 $members = [];
@@ -80,11 +92,11 @@ for ($i = 1; $i <= 50; $i++) {
    $templates[] = sprintf('template-%02d', $i); // %02d ensures two digits with leading zero
 }
 $fileUrl = "";
-if (!in_array($styledata['style_name'], $templates, true)) {
+if (!in_array($template_name, $templates, true)) {
    return;
 }
 
-if (file_exists(wpm_6310_plugin_url . "output/".esc_attr($styledata['style_name']).".php")) {
+if (file_exists(wpm_6310_plugin_url . "output/".esc_attr($template_name).".php")) {
    $fonts = '';
    $google_font = wpm_6310_get_option( 'wpm_6310_google_font_status');
    if ($google_font != 1) {
@@ -169,7 +181,7 @@ if (file_exists(wpm_6310_plugin_url . "output/".esc_attr($styledata['style_name'
          </div>
          <div 
             class='wpm_main_template wpm_main_template_{$ids}'
-            wpm-6310-carousel-styleName='{$styledata['style_name']}'
+            wpm-6310-carousel-styleName='{$template_name}'
             wpm-6310-carousel-itemPerRow='{$desktop_row}'
             wpm-6310-carousel-itemPerRow-tablet='{$tablet_row}'
             wpm-6310-carousel-itemPerRow-mobile='{$mobile_row}'
@@ -187,7 +199,7 @@ if (file_exists(wpm_6310_plugin_url . "output/".esc_attr($styledata['style_name'
             wpm_6310_progress_bar_border_radius='". (isset($allSlider[344]) ? $allSlider[344] : 10) ."'
    >";
    echo "<div class='".(($allSlider[0] == 0) ? 'wpm-6310-no-carousel' : '')."'>";
-   include wpm_6310_plugin_url . "output/".esc_attr($styledata['style_name']).".php";
+   include wpm_6310_plugin_url . "output/".esc_attr($template_name).".php";
 
    echo "</div>";
    echo "</div>";

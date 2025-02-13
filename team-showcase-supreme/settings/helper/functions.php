@@ -883,12 +883,12 @@ function wpm_6310_team_showcase_supreme_install()
 			");
 	}
 
-	// $install_default = wpm_6310_get_option( 'wpm_6310_install_default');
-	// if(!$install_default){
-	// 	$wpdb->query("INSERT INTO {$wpdb->prefix}options(option_name, option_value) VALUES ('wpm_6310_install_default', 1)");
-	// } else{
-	// 	return;
-	// }
+	$install_default = wpm_6310_get_option( 'wpm_6310_install_default');
+	if(!$install_default){
+		$wpdb->query("INSERT INTO {$wpdb->prefix}options(option_name, option_value) VALUES ('wpm_6310_install_default', 1)");
+	} else{
+		return;
+	}
 
 	$memberData = $wpdb->query("select id from $member_table LIMIT 1");
 	if (!$memberData && !$install_default) {

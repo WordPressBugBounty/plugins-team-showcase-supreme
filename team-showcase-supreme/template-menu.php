@@ -1,11 +1,5 @@
 <?php
 
-// Generate allowed templates dynamically
-$allowed_templates = [];
-for ($i = 1; $i <= 50; $i++) {
-   $allowed_templates[] = sprintf('template-%02d', $i); // Generates template-01, template-02, ..., template-50
-}
-
 function wpm_template_01_10()
 {
    global $wpdb;
@@ -26,7 +20,10 @@ function wpm_template_01_10()
       wp_enqueue_style('wpm-style-contact-description', plugins_url('assets/css/contact-description.css', __FILE__));
       include wpm_6310_plugin_url . 'settings/preview-01-10.php';
    } else if (!empty($_GET['styleid'])) {
-      global $allowed_templates;
+      $allowed_templates = [];
+      for ($i = 1; $i <= 50; $i++) {
+         $allowed_templates[] = sprintf('template-%02d', $i);
+      }
       $styleId = (int) ($_GET['styleid']);
       $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
@@ -38,21 +35,7 @@ function wpm_template_01_10()
          die('Invalid template selected.');
       }
 
-      $template_path = realpath(wpm_6310_plugin_url . 'settings/templates/' . $template_name . '.php');
-      $allowed_path = realpath(wpm_6310_plugin_url . 'settings/templates/');
-
-      // Ensure the resolved path is within the allowed directory
-      if (strpos($template_path, $allowed_path) !== 0 || !file_exists($template_path)) {
-         die('Invalid template path or file not found.');
-      }
-
-      if (!in_array($template_name, $allowed_templates)) {
-         die('Invalid template selected.');
-      }
-
-      $template_id = substr($styledata['style_name'], -2);
-      
-      
+      $template_id = substr($styledata['style_name'], -2);      
       include_once(wpm_6310_plugin_url . 'settings/helper/common-helper.php');
       wpm_6310_color_picker_script();
       wpm_6310_font_picker_script();
@@ -67,8 +50,7 @@ function wpm_template_01_10()
       wp_enqueue_style('wpm-6310-jquery-ui', wpm_6310_plugin_dir_url . 'assets/css/jquery-ui.min.css');
       $categoryData = $wpdb->get_results("SELECT * FROM $category_table order by serial asc", ARRAY_A);
 
-      //include wpm_6310_plugin_url . 'settings/templates/' . $styledata['style_name'] . '.php';
-      include $template_path;
+      include wpm_6310_plugin_url . 'settings/templates/' .$template_name . '.php';
    }
 }
 
@@ -92,25 +74,16 @@ function wpm_template_11_20()
       wp_enqueue_style('wpm-style-contact-description', plugins_url('assets/css/contact-description.css', __FILE__));
       include wpm_6310_plugin_url . 'settings/preview-11-20.php';
    } else if (!empty($_GET['styleid'])) {
-      global $allowed_templates;
+      $allowed_templates = [];
+      for ($i = 1; $i <= 50; $i++) {
+         $allowed_templates[] = sprintf('template-%02d', $i);
+      }
       $styleId = (int) ($_GET['styleid']);
       $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
 
       // Validate and sanitize the style name
       $template_name = $styledata['style_name'];
-
-      if (!in_array($template_name, $allowed_templates)) {
-         die('Invalid template selected.');
-      }
-
-      $template_path = realpath(wpm_6310_plugin_url . 'settings/templates/' . $template_name . '.php');
-      $allowed_path = realpath(wpm_6310_plugin_url . 'settings/templates/');
-
-      // Ensure the resolved path is within the allowed directory
-      if (strpos($template_path, $allowed_path) !== 0 || !file_exists($template_path)) {
-         die('Invalid template path or file not found.');
-      }
 
       if (!in_array($template_name, $allowed_templates)) {
          die('Invalid template selected.');
@@ -131,8 +104,7 @@ function wpm_template_11_20()
       wp_enqueue_script('wpm-6310-jquery-ui-js', wpm_6310_plugin_dir_url . 'assets/js/jquery-ui.min.js', array('jquery'));
       wp_enqueue_style('wpm-6310-jquery-ui', wpm_6310_plugin_dir_url . 'assets/css/jquery-ui.min.css');
       $categoryData = $wpdb->get_results("SELECT * FROM $category_table order by serial asc", ARRAY_A);
-      //include wpm_6310_plugin_url . 'settings/templates/' . $styledata['style_name'] . '.php';
-      include $template_path;
+      include wpm_6310_plugin_url . 'settings/templates/' .$template_name . '.php';
    }
 }
 
@@ -156,25 +128,16 @@ function wpm_template_21_30()
       wp_enqueue_style('wpm-style-contact-description', plugins_url('assets/css/contact-description.css', __FILE__));
       include wpm_6310_plugin_url . 'settings/preview-21-30.php';
    } else if (!empty($_GET['styleid'])) {
-      global $allowed_templates;
+      $allowed_templates = [];
+      for ($i = 1; $i <= 50; $i++) {
+         $allowed_templates[] = sprintf('template-%02d', $i);
+      }
       $styleId = (int) ($_GET['styleid']);
       $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
 
       // Validate and sanitize the style name
       $template_name = $styledata['style_name'];
-
-      if (!in_array($template_name, $allowed_templates)) {
-         die('Invalid template selected.');
-      }
-
-      $template_path = realpath(wpm_6310_plugin_url . 'settings/templates/' . $template_name . '.php');
-      $allowed_path = realpath(wpm_6310_plugin_url . 'settings/templates/');
-
-      // Ensure the resolved path is within the allowed directory
-      if (strpos($template_path, $allowed_path) !== 0 || !file_exists($template_path)) {
-         die('Invalid template path or file not found.');
-      }
 
       if (!in_array($template_name, $allowed_templates)) {
          die('Invalid template selected.');
@@ -195,8 +158,7 @@ function wpm_template_21_30()
       wp_enqueue_script('wpm-6310-jquery-ui-js', wpm_6310_plugin_dir_url . 'assets/js/jquery-ui.min.js', array('jquery'));
       wp_enqueue_style('wpm-6310-jquery-ui', wpm_6310_plugin_dir_url . 'assets/css/jquery-ui.min.css');
       $categoryData = $wpdb->get_results("SELECT * FROM $category_table order by serial asc", ARRAY_A);
-      //include wpm_6310_plugin_url . 'settings/templates/' . $styledata['style_name'] . '.php';
-      include $template_path;
+      include wpm_6310_plugin_url . 'settings/templates/' . $template_name . '.php';
    }
 }
 
@@ -220,24 +182,15 @@ function wpm_template_31_40()
       wp_enqueue_style('wpm-style-contact-description', plugins_url('assets/css/contact-description.css', __FILE__));
       include wpm_6310_plugin_url . 'settings/preview-31-40.php';
    } else if (!empty($_GET['styleid'])) {
-      global $allowed_templates;
+      $allowed_templates = [];
+      for ($i = 1; $i <= 50; $i++) {
+         $allowed_templates[] = sprintf('template-%02d', $i);
+      }
       $styleId = (int) ($_GET['styleid']);
       $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
       // Validate and sanitize the style name
       $template_name = $styledata['style_name'];
-
-      if (!in_array($template_name, $allowed_templates)) {
-         die('Invalid template selected.');
-      }
-
-      $template_path = realpath(wpm_6310_plugin_url . 'settings/templates/' . $template_name . '.php');
-      $allowed_path = realpath(wpm_6310_plugin_url . 'settings/templates/');
-
-      // Ensure the resolved path is within the allowed directory
-      if (strpos($template_path, $allowed_path) !== 0 || !file_exists($template_path)) {
-         die('Invalid template path or file not found.');
-      }
 
       if (!in_array($template_name, $allowed_templates)) {
          die('Invalid template selected.');
@@ -257,8 +210,7 @@ function wpm_template_31_40()
       wp_enqueue_script('wpm-6310-jquery-ui-js', wpm_6310_plugin_dir_url . 'assets/js/jquery-ui.min.js', array('jquery'));
       wp_enqueue_style('wpm-6310-jquery-ui', wpm_6310_plugin_dir_url . 'assets/css/jquery-ui.min.css');
       $categoryData = $wpdb->get_results("SELECT * FROM $category_table order by serial asc", ARRAY_A);
-      //include wpm_6310_plugin_url . 'settings/templates/' . $styledata['style_name'] . '.php';
-      include $template_path;
+      include wpm_6310_plugin_url . 'settings/templates/' . $template_name . '.php';
    }
 }
 
@@ -284,25 +236,16 @@ function wpm_template_41_50()
       wp_enqueue_style('wpm-style-contact-description', plugins_url('assets/css/contact-description.css', __FILE__));
       include wpm_6310_plugin_url . 'settings/preview-41-50.php';
    } else if (!empty($_GET['styleid'])) {
-      global $allowed_templates;
+      $allowed_templates = [];
+      for ($i = 1; $i <= 50; $i++) {
+         $allowed_templates[] = sprintf('template-%02d', $i);
+      }
       $styleId = (int) ($_GET['styleid']);
       $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
 
       // Validate and sanitize the style name
       $template_name = $styledata['style_name'];
-
-      if (!in_array($template_name, $allowed_templates)) {
-         die('Invalid template selected.');
-      }
-
-      $template_path = realpath(wpm_6310_plugin_url . 'settings/templates/' . $template_name . '.php');
-      $allowed_path = realpath(wpm_6310_plugin_url . 'settings/templates/');
-
-      // Ensure the resolved path is within the allowed directory
-      if (strpos($template_path, $allowed_path) !== 0 || !file_exists($template_path)) {
-         die('Invalid template path or file not found.');
-      }
 
       if (!in_array($template_name, $allowed_templates)) {
          die('Invalid template selected.');
@@ -323,8 +266,7 @@ function wpm_template_41_50()
       wp_enqueue_script('wpm-6310-jquery-ui-js', wpm_6310_plugin_dir_url . 'assets/js/jquery-ui.min.js', array('jquery'));
       wp_enqueue_style('wpm-6310-jquery-ui', wpm_6310_plugin_dir_url . 'assets/css/jquery-ui.min.css');
       $categoryData = $wpdb->get_results("SELECT * FROM $category_table order by serial asc", ARRAY_A);
-      //include wpm_6310_plugin_url . 'settings/templates/' . $styledata['style_name'] . '.php';
-      include $template_path;
+      include wpm_6310_plugin_url . 'settings/templates/' . $template_name . '.php';
    }
 }
 
