@@ -17,16 +17,14 @@ $allStyle = explode("|", $styledata['css']);
 $allSlider = explode("|", $styledata['slider']);
 
 $allowed_templates = [];
-for ($i = 1; $i <= 50; $i++) {
+for ($i = 1; $i <= 10; $i++) {
    $allowed_templates[] = sprintf('template-%02d', $i); // Generates template-01, template-02, ..., template-50
 }
 
-
-
-      if (!in_array($template_name, $allowed_templates)) {
-         die('Invalid template selected.');
-      }
-
+if (!in_array($template_name, $allowed_templates)) {
+   echo "This template is available in the pro version only.";
+   return;
+}
 
 $members = [];
 if($styledata['memberid']){

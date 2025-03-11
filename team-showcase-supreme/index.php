@@ -8,14 +8,14 @@
   Author URI: http://www.wpmart.org/
   Text Domain: team-showcase-supreme
   Domain Path: /languages
-  Version: 7.6
+  Version: 7.7
  */
 if (!defined('ABSPATH'))
    exit;   
 
 define('wpm_6310_plugin_url', plugin_dir_path(__FILE__));
 define('wpm_6310_plugin_dir_url', plugin_dir_url(__FILE__));
-define ('WPM_PLUGIN_CURRENT_VERSION', 7.6);
+define ('WPM_PLUGIN_CURRENT_VERSION', 7.7);
 define( 'WPM_6310_PLUGIN_LANGUAGE_PATH', dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 add_shortcode('wpm_team_showcase', 'wpm_team_showcase_supreme_shortcode');
@@ -130,28 +130,6 @@ function register_custom_post_type() {
    register_post_type( 'wpm_team', $args );
  }
  add_action( 'init', 'register_custom_post_type', 10 );
-
- add_filter('mod_rewrite_rules', 'wpm_6310_fix_rewritebase');
-function wpm_6310_fix_rewritebase($rules){
-    $home_root = parse_url(home_url());
-    if ( isset( $home_root['path'] ) ) {
-        $home_root = trailingslashit($home_root['path']);
-    } else {
-        $home_root = '/';
-    }
-  
-    $wpml_root = parse_url(get_option('home'));
-    if ( isset( $wpml_root['path'] ) ) {
-        $wpml_root = trailingslashit($wpml_root['path']);
-    } else {
-        $wpml_root = '/';
-    }
-  
-    $rules = str_replace("RewriteBase $home_root", "RewriteBase $wpml_root", $rules);
-    $rules = str_replace("RewriteRule . $home_root", "RewriteRule . $wpml_root", $rules);
-  
-    return $rules;
-}
 
 
 
