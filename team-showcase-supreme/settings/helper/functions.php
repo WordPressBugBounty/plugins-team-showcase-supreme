@@ -3408,8 +3408,6 @@ function wpm_6310_multi_language_get($field, $value, $id = '') {
     return wpm_6310_replace(esc_html__($value));
 }
 
-
-
 function wpm_6310_extract_data($data)
 {
 	 $array_key = "";
@@ -3432,4 +3430,33 @@ function wpm_6310_extract_data($data)
 			$i++;
 	 }
 	 return $array_key . "!!##!!" . $array_value;
+}
+
+function wpm_6310_delete_unnecessary_data() {
+	global $wpdb;
+	$member_table = $wpdb->prefix . 'wpm_6310_member';
+	$posts = get_posts([
+			'post_type' => 'wpm_team',
+			'posts_per_page' => -1,
+			'fields' => 'ids'
+	]);
+
+	foreach ($posts as $post_id) {
+			$selMember = $wpdb->get_row(
+					$wpdb->prepare("SELECT * FROM $member_table WHERE post_id = %d", $post_id),
+					ARRAY_A
+			);
+			if (!$selMember || $selMember['profile_details_type'] != 3) {
+					wp_delete_post($post_id, true);
+					if ($selMember && $selMember['profile_details_type'] != 3) {
+							$wpdb->update(
+									$member_table,
+									['post_id' => 0],
+									['id' => $selMember['id']],
+									['%d'],
+									['%d']
+							);
+					}
+			}
+	}
 }

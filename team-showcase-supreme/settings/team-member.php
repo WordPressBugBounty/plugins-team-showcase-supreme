@@ -1880,3 +1880,4 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
       });
    });
 </script>
+<?php wpm_6310_delete_unnecessary_data(); ?>
