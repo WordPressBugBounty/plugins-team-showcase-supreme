@@ -23,7 +23,7 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
 ?>
    <div class="wpm_6310_add_media">
       <h6>Customize Team Members</h6>
-      <div class="wpm_6310_add_media_body" id="wpm_6310_add_new_media">
+      <div class="wpm_6310_add_media_body wpm_6310_add_new_media">
          <i class="fas fa-plus-circle wpm_6310_add_media_add_new_icon"></i>
          Add/Edit Members
       </div>
@@ -533,7 +533,7 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
             return false;
          });
 
-         jQuery("body").on("click", "#wpm_6310_add_new_media", function() {
+         jQuery("body").on("click", ".wpm_6310_add_new_media", function() {
             jQuery("#wpm_6310_add_new_media_modal").fadeIn(500);
             jQuery("body").css({
                "overflow": "hidden"

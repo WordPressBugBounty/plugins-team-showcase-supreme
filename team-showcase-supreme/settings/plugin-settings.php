@@ -258,7 +258,7 @@ if (!defined('ABSPATH'))
                   jQuery("#loading-image-src").val(image_url);
                });
 
-            jQuery("#wpm_6310_add_new_media").css({
+            jQuery(".wpm_6310_add_new_media").css({
                "overflow-x": "hidden",
                "overflow-y": "auto"
             });
@@ -276,7 +276,7 @@ if (!defined('ABSPATH'))
                   jQuery("#prev-image-src").val(image_url);
                });
 
-            jQuery("#wpm_6310_add_new_media").css({
+            jQuery(".wpm_6310_add_new_media").css({
                "overflow-x": "hidden",
                "overflow-y": "auto"
             });
@@ -294,10 +294,11 @@ if (!defined('ABSPATH'))
                   jQuery("#next-image-src").val(image_url);
                });
 
-            jQuery("#wpm_6310_add_new_media").css({
+            jQuery(".wpm_6310_add_new_media").css({
                "overflow-x": "hidden",
                "overflow-y": "auto"
             });
          });
       });
    </script>
+   <?php wpm_6310_delete_unnecessary_data(); ?>

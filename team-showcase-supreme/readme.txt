@@ -3,7 +3,7 @@ Contributors: wpmart
 Tags: team, our team, team members, wp team, team member, wordpress team member plugin, team member plugin
 Requires at least: 4.6.14
 Tested up to: 6.8
-Stable tag: 7.9
+Stable tag: 8.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -182,6 +182,9 @@ If You acquired the Team Showcase with Slider and have not received it, please j
 
 
 == Changelog ==
+= 8.0 =
+* FEATURE – Bug fixed
+
 = 7.9 =
 * FEATURE – Fixed CSS issue
 

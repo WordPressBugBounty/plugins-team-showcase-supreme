@@ -45,4 +45,10 @@ jQuery(document).ready(function () {
     });
     return false;
   });
+
+  if(jQuery('.wpm-6310-row').children().length === 0){
+    jQuery('.wpm_6310_tabs_panel_preview').html('<div class="wpm_6310_add_media_body wpm_6310_add_new_media wpm_6310_add_new_media_member_only">You didn\'t add any members to this team section. Click here to add a new member.</div><div class="wpm-6310-video-references"><a href="https://drive.google.com/file/d/1fS4rdRI7QUhNnRB2HYcP1wIsoLi3rz-B/view?usp=sharing" target="_blank">For reference, please check this video.</a></div>');
+  } else{
+    jQuery('.wpm_6310_add_new_media_member_only, .wpm-6310-video-references').remove();
+  }
 });

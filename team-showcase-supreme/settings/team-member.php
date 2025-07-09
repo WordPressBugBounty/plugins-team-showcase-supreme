@@ -814,7 +814,7 @@ $total_template = 3;
                              jQuery("#wpm_6310_upload_team_member_image_src-edit").val(image_url);
                           });
 
-                  jQuery("#wpm_6310_add_new_media").css({
+                  jQuery(".wpm_6310_add_new_media").css({
                      "overflow-x": "hidden",
                      "overflow-y": "auto"
                   });
@@ -833,7 +833,7 @@ $total_template = 3;
                            //jQuery("#vkcmu-favicon-image").attr("src", image_url);
                         });
 
-                  jQuery("#wpm_6310_add_new_media").css({
+                  jQuery(".wpm_6310_add_new_media").css({
                      "overflow-x": "hidden",
                      "overflow-y": "auto"
                   });
@@ -850,7 +850,7 @@ $total_template = 3;
                              var image_url = uploaded_image.toJSON().url;
                              jQuery("#wpm_6310_upload_team_member_hover_image_src-edit").val(image_url);
                           });
-                  jQuery("#wpm_6310_add_new_media").css({
+                  jQuery(".wpm_6310_add_new_media").css({
                      "overflow-x": "hidden",
                      "overflow-y": "auto"
                   });
@@ -948,7 +948,7 @@ else if (!empty($_POST['rearrange-contacts']) && $_POST['rearrange-contacts'] ==
                return false;
             });
 
-            jQuery("body").on("click", "#wpm_6310_add_new_media", function() {
+            jQuery("body").on("click", ".wpm_6310_add_new_media", function() {
                jQuery("#wpm_6310_add_new_media_modal").fadeIn(500);
                jQuery("body").css({
                   "overflow": "hidden"
@@ -1063,7 +1063,7 @@ else if (!empty($_POST['rearrange-skills']) && $_POST['rearrange-skills'] == 'Re
                return false;
             });
 
-            jQuery("body").on("click", "#wpm_6310_add_new_media", function() {
+            jQuery("body").on("click", ".wpm_6310_add_new_media", function() {
                jQuery("#wpm_6310_add_new_media_modal").fadeIn(500);
                jQuery("body").css({
                   "overflow": "hidden"
@@ -1182,7 +1182,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                return false;
             });
 
-            jQuery("body").on("click", "#wpm_6310_add_new_media", function() {
+            jQuery("body").on("click", ".wpm_6310_add_new_media", function() {
                jQuery("#wpm_6310_add_new_media_modal").fadeIn(500);
                jQuery("body").css({
                   "overflow": "hidden"
@@ -1762,7 +1762,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                     //jQuery("#vkcmu-favicon-image").attr("src", image_url);
                  });
 
-         jQuery("#wpm_6310_add_new_media").css({
+         jQuery(".wpm_6310_add_new_media").css({
             "overflow-x": "hidden",
             "overflow-y": "auto"
          });
@@ -1781,7 +1781,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                     //jQuery("#vkcmu-favicon-image").attr("src", image_url);
                  });
 
-         jQuery("#wpm_6310_add_new_media").css({
+         jQuery(".wpm_6310_add_new_media").css({
             "overflow-x": "hidden",
             "overflow-y": "auto"
          });
@@ -1815,7 +1815,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                     jQuery("#wpm_6310_upload_team_member_hover_image_src").val(image_url);
                  });
 
-         jQuery("#wpm_6310_add_new_media").css({
+         jQuery(".wpm_6310_add_new_media").css({
             "overflow-x": "hidden",
             "overflow-y": "auto"
 
@@ -1880,4 +1880,3 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
       });
    });
 </script>
-<?php wpm_6310_delete_unnecessary_data(); ?>

@@ -1347,3 +1347,15 @@ h1.wpm-6310-wpmart-all-plugins {
    float: left;
    width: 100%;
 }
+.wpm-6310-video-references a{
+   text-decoration: none;
+    text-align: center;
+    display: flow-root;
+    font-size: 1.2rem;
+    color: #036703;
+    padding: 15px 0 15px;
+}
+.wpm-6310-video-references a:hover{
+   background: #2296f3;
+   color: #FFF;
+}

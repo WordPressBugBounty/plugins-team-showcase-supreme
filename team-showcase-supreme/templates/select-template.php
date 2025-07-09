@@ -84,7 +84,7 @@
           //jQuery("#vkcmu-favicon-image").attr("src", image_url);
         });
 
-      jQuery("#wpm_6310_add_new_media").css({
+      jQuery(".wpm_6310_add_new_media").css({
         "overflow-x": "hidden",
         "overflow-y": "auto"
       });
