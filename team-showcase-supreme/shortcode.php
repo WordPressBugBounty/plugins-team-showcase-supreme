@@ -49,16 +49,7 @@ if($styledata['memberid']){
          if ($tempId == '') {
             return;
          }
-
-         $members = [];
-         if($tempId){
-            $tempId = explode(',', $tempId);
-            if(count($tempId)){
-               foreach($tempId as $value){
-                  $members[] = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $value), ARRAY_A);
-               }
-            }
-         }
+         $members = $wpdb->get_results("SELECT * FROM $member_table WHERE id in ({$tempId}) ORDER BY name asc", ARRAY_A);
       }
       else{
          return;

@@ -23,7 +23,7 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
 ?>
    <div class="wpm_6310_add_media">
       <h6>Customize Team Members</h6>
-      <div class="wpm_6310_add_media_body wpm_6310_add_new_media">
+      <div class="wpm_6310_add_media_body" id="wpm_6310_add_new_media">
          <i class="fas fa-plus-circle wpm_6310_add_media_add_new_icon"></i>
          Add/Edit Members
       </div>
@@ -32,6 +32,7 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
    <div class="wpm_6310_add_media">
       <h6>
          Rearrange Team
+         <span class="wpm-6310-pro">(Pro) <div class="wpm-6310-pro-text">This feature is available on the pro version only. You can view changes in the admin panel, not in the output.</div></span>
       </h6>
       <div class="wpm_6310_add_media_body" id="wpm_6310_rearrange_team">
          <i class="fas fa-cogs wpm_6310_add_media_add_new_icon"></i>
@@ -101,12 +102,13 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
             <input type="hidden" name="rearrange_list_all" id="rearrange_list_all" value="" />
             <div class="wpm-6310-modal-header">
                Rearrange Teams
+               <span class="wpm-6310-pro">(Pro) <div class="wpm-6310-pro-text">This feature is available on the pro version only. You can view changes in the admin panel, not in the output.</div></span>
                <span class="wpm-6310-icon-close">&times;</span>
             </div>
             <div class="wpm-6310-modal-body-form">
                <p>
                   <b>Order Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-                  <input type="radio" name="order_type" value="0" checked>Custom Order &nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="order_type" value="0" checked>Custom Order <span class="wpm-6310-pro">(Pro)</span>&nbsp;&nbsp;&nbsp;
                   <input type="radio" name="order_type" value="1" <?php if(esc_attr($order_type) == 1) echo ' checked'; ?>>Random Order
                   <span class="wpm-6310-pro">(Pro)</span>
                </p>
@@ -533,7 +535,7 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
             return false;
          });
 
-         jQuery("body").on("click", ".wpm_6310_add_new_media", function() {
+         jQuery("body").on("click", "#wpm_6310_add_new_media", function() {
             jQuery("#wpm_6310_add_new_media_modal").fadeIn(500);
             jQuery("body").css({
                "overflow": "hidden"
