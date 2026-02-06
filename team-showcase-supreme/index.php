@@ -1,21 +1,21 @@
 <?php
 
 /*
-  Plugin Name: Team Member – Multi Language Supported Team Plugin
+  Plugin Name: Team Members – Multi Language Supported Team Plugin
   Plugin URI: https://wordpress.org/plugins/team-showcase-supreme
   Description: Team Members is a powerful &amp; robust but easy to represent your team/staff members and their profiles with animated &amp; beautiful styled descriptions, skills &amp; links to social media.
   Author: Sk. Abul Hasan
   Author URI: http://www.wpmart.org/
   Text Domain: team-showcase-supreme
   Domain Path: /languages
-  Version: 8.1
+  Version: 8.5
  */
 if (!defined('ABSPATH'))
    exit;   
 
 define('wpm_6310_plugin_url', plugin_dir_path(__FILE__));
 define('wpm_6310_plugin_dir_url', plugin_dir_url(__FILE__));
-define ('WPM_PLUGIN_CURRENT_VERSION', 8.1);
+define ('WPM_PLUGIN_CURRENT_VERSION', 8.5);
 define( 'WPM_6310_PLUGIN_LANGUAGE_PATH', dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 add_shortcode('wpm_team_showcase', 'wpm_team_showcase_supreme_shortcode');
@@ -53,7 +53,8 @@ function team_showcase_supreme_menu() {
 
 function wpm_6310_home() {
    global $wpdb;
-   wp_enqueue_style('wpm-font-awesome-5-0-13', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+   wp_enqueue_style('wpm-6310-font-awesome-new', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+   wp_enqueue_style('wpm-6310-font-awesome-old', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css');
    wp_enqueue_style('wpm-6310-style', plugins_url('assets/css/style.css', __FILE__));
 
    $style_table = $wpdb->prefix . 'wpm_6310_style';

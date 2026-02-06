@@ -9,17 +9,13 @@ if (!defined('ABSPATH')) {
   <p>Activate your copy to get direct plugin updates and official support.</p>
   <?php
   if (!empty($_POST['save'])) {
-    $nonce = $_REQUEST['_wpnonce'];
-    if (!wp_verify_nonce($nonce, 'wpm-nonce-field-license')) {
-      die('You do not have sufficient permissions to access this page.');
-    } else {
+      wpm_6310_validate_request('wpm_nonce_field_license');
       wpm_6310_check_license(sanitize_text_field($_POST['license']));
-    }
   }
   ?>
   <form action="" method="post" style="width: 600px">
     <?php
-    echo wp_nonce_field("wpm-nonce-field-license");
+    echo wp_nonce_field("wpm_nonce_field_license");
     ?>
     <table>
       <tr>

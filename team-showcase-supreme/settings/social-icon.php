@@ -10,30 +10,20 @@ if (!defined('ABSPATH'))
    wpm_6310_color_picker_script();
 
    if (!empty($_POST['delete']) && isset($_POST['id']) && is_numeric($_POST['id'])) {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-nonce-field-delete')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_nonce_field_delete');
          $id = (int) $_POST['id'];
          $wpdb->query($wpdb->prepare("DELETE FROM {$icon_table} WHERE id = %d", $id));
-      }
    } else if (!empty($_POST['save']) && $_POST['save'] == 'Save') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-add')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_6310_nonce_add');
          $name = sanitize_text_field($_POST['name']);
          $class_name = sanitize_text_field($_POST['class_name']);
          $color = sanitize_text_field($_POST['color']);
          $bgcolor = sanitize_text_field($_POST['bgcolor']);
 
          $wpdb->query($wpdb->prepare("insert into $icon_table SET name = %s, class_name = %s, color = %s, bgcolor = %s", $name, $class_name, $color, $bgcolor));
-      }
    } else if (!empty($_POST['update']) && $_POST['update'] == 'Update') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-update')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_6310_nonce_update');
+     
          $id = (int) sanitize_text_field($_POST['id']);
          $name = sanitize_text_field($_POST['name']);
          $class_name = sanitize_text_field($_POST['class_name']);
@@ -41,12 +31,9 @@ if (!defined('ABSPATH'))
          $bgcolor = sanitize_text_field($_POST['bgcolor']);
 
          $wpdb->query($wpdb->prepare("update $icon_table SET name = %s, class_name = %s, color = %s, bgcolor = %s where id=%d", $name, $class_name, $color, $bgcolor, $id));
-      }
    } else if (!empty($_POST['edit']) && $_POST['edit'] == 'Edit') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-nonce-field-edit')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_nonce_field_edit');
+      
          $id = (int) $_POST['id'];
          $selIcon = $wpdb->get_row($wpdb->prepare("SELECT * FROM $icon_table WHERE id = %d ", $id), ARRAY_A);
          ?>
@@ -59,7 +46,7 @@ if (!defined('ABSPATH'))
                      <span class="wpm-6310-close">&times;</span>
                   </div>
                   <div class="wpm-6310-modal-body-form">         
-                     <?php wp_nonce_field("wpm-6310-nonce-update") ?>
+                     <?php wp_nonce_field("wpm_6310_nonce_update") ?>
                      <table border="0" width="100%" cellpadding="10" cellspacing="0">
                         <tr>
                            <td width="50%"><label class="wpm-form-label" for="icon_name">Icon Name:</label></td>
@@ -89,7 +76,6 @@ if (!defined('ABSPATH'))
             </div>
          </div>
          <?php
-      }
    }
    ?>
 
@@ -114,12 +100,12 @@ if (!defined('ABSPATH'))
                   </td>";
          echo '<td>
                  <form method="post">
-                   ' . wp_nonce_field("wpm-nonce-field-edit") . '
+                   ' . wp_nonce_field("wpm_nonce_field_edit") . '
                           <input type="hidden" name="id" value="' . $value['id'] . '">
                           <button class="wpm-btn-success wpm-margin-right-10" style="float:left"  title="Edit"  type="submit" value="Edit" name="edit"><i class="fas fa-edit" aria-hidden="true"></i></button>  
                   </form>
                   <form method="post">
-                   ' . wp_nonce_field("wpm-nonce-field-delete") . '
+                   ' . wp_nonce_field("wpm_nonce_field_delete") . '
                           <input type="hidden" name="id" value="' . $value['id'] . '">
                           <button class="wpm-btn-danger wpm-6310-social-icon-delete" style="float:left"  title="Delete"  type="submit" value="delete" name="delete"><i class="far fa-times-circle" aria-hidden="true"></i></button>  
                   </form>
@@ -145,7 +131,7 @@ if (!defined('ABSPATH'))
                <span class="wpm-6310-close">&times;</span>
             </div>
             <div class="wpm-6310-modal-body-form">         
-               <?php wp_nonce_field("wpm-6310-nonce-add") ?>
+               <?php wp_nonce_field("wpm_6310_nonce_add") ?>
                <table border="0" width="100%" cellpadding="10" cellspacing="0">
                   <tr>
                      <td width="50%"><label class="wpm-form-label" for="icon_name">Icon Name:</label></td>

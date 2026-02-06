@@ -20,10 +20,8 @@ if (!defined('ABSPATH'))
   $wpm_6310_selected_server = wpm_6310_get_option('wpm_6310_selected_server');
 
    if (!empty($_POST['update']) && $_POST['update'] == 'Update') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-update')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_6310_nonce_update');
+     
          //Loading image start
          $wpm_6310_loading_icon = wpm_6310_get_option('wpm_6310_loading_icon');
          if(!$wpm_6310_loading_icon){
@@ -134,7 +132,6 @@ if (!defined('ABSPATH'))
                         where option_name = 'wpm_6310_selected_server'");
          }
          $wpm_6310_selected_server =  $_POST['wpm_6310_selected_server'];
-      }
    }
 
    
@@ -149,7 +146,7 @@ if (!defined('ABSPATH'))
    }
    ?>
    <form action="" method="post">
-      <?php wp_nonce_field("wpm-6310-nonce-update") ?>
+      <?php wp_nonce_field("wpm_6310_nonce_update") ?>
       <div class="wpm-6310-modal-body-form">
          <table width="100%" cellpadding="10" cellspacing="0">
             <tr>

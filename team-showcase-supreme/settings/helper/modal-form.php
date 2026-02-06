@@ -21,6 +21,15 @@
                   echo "<option value='{$i}'{$selected}>Template 0{$i}</option>";
                 }
               }
+              $imgUrl = [
+                '',
+                'https://i.postimg.cc/MThrrGbD/modal-1.png',
+                'https://i.postimg.cc/VvnHycDq/modal-2.png',
+                'https://i.postimg.cc/T1gH8XCb/modal-3.png',
+                'https://i.postimg.cc/W3Qff46S/modal-4.png',
+                'https://i.postimg.cc/zB9PPfSk/modal-5.png',
+                'https://i.postimg.cc/tTLmmgth/modal-6.png'
+              ]
               ?>
             </select>
           </td>
@@ -31,7 +40,7 @@
       <table class="table table-responsive">
         <tr>
           <td>
-            <a href='https://www.wpmart.org/wp-content/wpm-templates/modal_<?php echo esc_attr($modal_template) ?>.png' target="_blank" class="modal-demo-image"><img src="https://www.wpmart.org/wp-content/wpm-templates/modal_<?php echo esc_attr($modal_template) ?>.png" style="width: auto; height: 70px;" /></a>
+            <a href='https://www.wpmart.org/wp-content/wpm-templates/modal_<?php echo $modal_template ?>.png' target="_blank" class="modal-demo-image"><img src="<?php echo $imgUrl[$modal_template] ?>" style="width: auto; height: 120px;" /></a>
             <small style="color:blue; display:block;">(Click to preview template design)</small>
           </td>
         </tr>
@@ -1019,12 +1028,39 @@
     ?>
 
     jQuery('body').on('change', '#modal_template_number', function() {
+      jQuery('.wpm_6310_loading').show();
+
+      var arr = [
+        '',
+        'https://i.postimg.cc/MThrrGbD/modal-1.png',
+        'https://i.postimg.cc/VvnHycDq/modal-2.png',
+        'https://i.postimg.cc/T1gH8XCb/modal-3.png',
+        'https://i.postimg.cc/W3Qff46S/modal-4.png',
+        'https://i.postimg.cc/zB9PPfSk/modal-5.png',
+        'https://i.postimg.cc/tTLmmgth/modal-6.png'
+      ];
+
       var num = jQuery(this).val();
-      var url = `https://www.wpmart.org/wp-content/wpm-templates/modal_${num}.png`;
-      jQuery('.modal-demo-image').attr('href', url);
-      jQuery('.modal-demo-image img').attr('src', url);
+      var url = arr[num];
+
+      var $img = jQuery('.modal-demo-image img');
+      var $link = jQuery('.modal-demo-image');
+
+      // Update href and show loader
+      $link.attr('href', `https://www.wpmart.org/wp-content/wpm-templates/modal_${num}.png`);
+      $img.attr('src', url);
+
+      // Hide all template fields, show selected one
       jQuery('.modal-template-field').hide();
       jQuery(`.modal-template-field-${num}`).show();
+
+      // Wait until image loads before hiding loader
+      $img.on('load', function() {
+        jQuery('.wpm_6310_loading').hide();
+      }).on('error', function() {
+        // Also hide loader if image fails to load
+        jQuery('.wpm_6310_loading').hide();
+      });
     });
   });
 </script>

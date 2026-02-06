@@ -578,7 +578,8 @@ function wpm_6310_team_member_info()
 
 function wpm_6310_link_css_js()
 {
-	wp_enqueue_style('font-awesome-5-0-13', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+	wp_enqueue_style('wpm-6310-font-awesome-new', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+  wp_enqueue_style('wpm-6310-font-awesome-old', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css');
 	wp_enqueue_style('wpm-codemirror-style', wpm_6310_plugin_dir_url . 'assets/css/codemirror.min.css');
 	wp_enqueue_style('wpm-color-style',  wpm_6310_plugin_dir_url . 'assets/css/jquery.minicolors.min.css');
 	wp_enqueue_style('wpm-6310-jquery-ui', wpm_6310_plugin_dir_url . 'assets/css/jquery-ui.min.css');
@@ -3460,3 +3461,19 @@ function wpm_6310_delete_unnecessary_data() {
 			}
 	}
 }
+
+function wpm_6310_validate_request($nonce_action) {
+	// Ensure request method is POST
+	if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			wp_die('Invalid request method.', 'Error', ['response' => 405]);
+	}
+
+	// Check nonce + referer (will die on failure automatically)
+	check_admin_referer($nonce_action);
+
+	// Check user capability
+	if (!current_user_can('manage_options')) {
+			wp_die('Insufficient permissions.', 'Error', ['response' => 403]);
+	}
+}
+

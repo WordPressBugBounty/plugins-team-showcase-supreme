@@ -10,7 +10,7 @@
 
     //Update CSS
     if (!empty($_POST['update_style_change']) && $_POST['update_style_change'] == 'Save Changes') {
-      $nonce = $_REQUEST['_wpnonce'];
+        wpm_6310_validate_request('wpm_nonce_field_form');
       if (!wp_verify_nonce($nonce, 'wpm_6310_nonce_field_form')) {
         die('You do not have sufficient permissions to access this pagess.');
       } else {

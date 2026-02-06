@@ -1,46 +1,37 @@
 <?php
 if (!empty($_POST['rearrange-list-save']) && $_POST['rearrange-list-save'] == 'Save' && $_POST['rearrange_id'] != ''&& $_POST['rearrange_list'] != '') {
-    $memberId = $_POST['rearrange_list'] . "||##||" . $_POST['order_type'] . "||##||" . $_POST['rearrange_list_all'];
+    // Combined validation checks
+    wpm_6310_validate_request('wpm_rearrange_action');
+
+    $memberId = sanitize_text_field($_POST['rearrange_list']) . "||##||" . sanitize_text_field($_POST['order_type']) . "||##||" . sanitize_text_field($_POST['rearrange_list_all']);
     $wpdb->query($wpdb->prepare("UPDATE $style_table SET memberid = %s WHERE id = %d", $memberId, $_POST['rearrange_id']));
 }
 
 if (!empty($_POST['category-rearrange-list-save']) && $_POST['category-rearrange-list-save'] == 'Save' && $_POST['category_rearrange_id'] != '') {
-    $nonce = $_REQUEST['_wpnonce'];
+      wpm_6310_validate_request('wpm_6310_nonce_rearrange_category');
     $style_table = $wpdb->prefix . 'wpm_6310_style';
     
-    if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-rearrange-category')) {
-       die('You do not have sufficient permissions to access this page.');
-    } else {
         $id = (int) sanitize_text_field($_POST['category_rearrange_id']);
         $catOrder = sanitize_text_field($_POST['category_rearrange_list']);
         $wpdb->query($wpdb->prepare("UPDATE $style_table SET categoryids = %s WHERE id = %d", $catOrder, $id));
-    }
 }
 
 if (!empty($_POST['team-category-save']) && $_POST['team-category-save'] == 'Save' && $_POST['styleid'] != '') {
-    $nonce = $_REQUEST['_wpnonce'];
-    $style_table = $wpdb->prefix . 'wpm_6310_style';
-    
-    if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-add-category')) {
-       die('You do not have sufficient permissions to access this page.');
-    } else {
+      wpm_6310_validate_request('wpm_6310_nonce_add_category');
+
         $id = (int) sanitize_text_field($_POST['styleid']);
         $catOrder = $_POST['catid'] ? array_map('sanitize_text_field', $_POST['catid']) : '';
         if($catOrder) {
             $catOrder = implode(',', $catOrder);
         }
         $wpdb->query($wpdb->prepare("UPDATE $style_table SET categoryids = %s WHERE id = %d", $catOrder, $id));
-    }
 }
 
 if (!empty($_POST['team-member-save']) && $_POST['team-member-save'] == 'Save' && $_POST['styleid'] != '') {
-         $nonce = $_REQUEST['_wpnonce'];
+           wpm_6310_validate_request('wpm_6310_nonce_add_member');
          $member_table = $wpdb->prefix . 'wpm_6310_member';
          $category_table = $wpdb->prefix . 'wpm_6310_category';
          
-         if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-add-member')) {
-            die('You do not have sufficient permissions to access this page.');
-         } else {
             $id = sanitize_text_field($_POST['styleid']);
             $memberids = isset($_POST['memid']) ? $_POST['memid'] : '';
             $memIds = "";
@@ -124,17 +115,12 @@ if (!empty($_POST['team-member-save']) && $_POST['team-member-save'] == 'Save' &
             }
             $newStr = $memIds . '||##||' . (isset($memList[1]) ? $memList[1] : 0) . '||##||' . $mainStr;
             $wpdb->query($wpdb->prepare("UPDATE $style_table SET memberid = %s WHERE id = %d", $newStr, $id));
-         }
 }
 
 
 if (!empty($_POST['change_template_update']) && $_POST['change_template_update'] == 'Update') {
-    $nonce = $_REQUEST['_wpnonce'];
+      wpm_6310_validate_request('wpm_nonce_change_template');
     $style_table = $wpdb->prefix . 'wpm_6310_style';
-    
-    if (!wp_verify_nonce($nonce, 'wpm_nonce_change_template')) {
-       die('You do not have sufficient permissions to access this page.');
-    } else {
         $id = (int) sanitize_text_field($_POST['id']);
         $old = sanitize_text_field($_POST['old_style_name']);
         $new = sanitize_text_field($_POST['new_style_name']);
@@ -158,7 +144,6 @@ if (!empty($_POST['change_template_update']) && $_POST['change_template_update']
             $url = admin_url("admin.php?page=wpm-template-{$suffix}&styleid=$id");
             echo '<script type="text/javascript"> document.location.href = "' . $url . '"; </script>';
         }
-    }
 }
 
 ?>

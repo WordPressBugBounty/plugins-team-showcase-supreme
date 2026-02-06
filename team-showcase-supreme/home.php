@@ -3,32 +3,25 @@ if (!defined('ABSPATH'))
 exit;
 
 if (!empty($_POST['delete']) && isset($_POST['id']) && is_numeric($_POST['id'])) {
-  $nonce = $_REQUEST['_wpnonce'];
-  if (!wp_verify_nonce($nonce, 'tss_nonce_field_delete')) {
-    die('You do not have sufficient permissions to access this page.');
-  } else {
+    wpm_6310_validate_request('tss_nonce_field_delete');
     $id = (int) $_POST['id'];
     $wpdb->query($wpdb->prepare("DELETE FROM {$style_table} WHERE id = %d", $id));
-  }
 }
 
 if (!empty($_POST['duplicate']) && isset($_POST['id']) && is_numeric($_POST['id'])) {
-  $nonce = $_REQUEST['_wpnonce'];
-  if (!wp_verify_nonce($nonce, 'tss_nonce_field_duplicate')) {
-    die('You do not have sufficient permissions to access this page.');
-  } else {
-    $id = (int) $_POST['id'];
-    $selectedData = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $id), ARRAY_A);
-    $dupList = array(
-            $selectedData['name'] . '-copy', 
-            $selectedData['style_name'], 
-            $selectedData['css'], 
-            $selectedData['slider'],  
-            $selectedData['memberid'],
-            $selectedData['memberorder'],
-            $selectedData['categoryids']);
-    $wpdb->query($wpdb->prepare("INSERT INTO {$style_table} (name, style_name, css, slider, memberid, memberorder, categoryids) VALUES ( %s, %s, %s, %s, %s, %s, %s )", $dupList));
-  }
+  wpm_6310_validate_request('tss_nonce_field_duplicate');
+
+  $id = (int) $_POST['id'];
+  $selectedData = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $id), ARRAY_A);
+  $dupList = array(
+          $selectedData['name'] . '-copy', 
+          $selectedData['style_name'], 
+          $selectedData['css'], 
+          $selectedData['slider'],  
+          $selectedData['memberid'],
+          $selectedData['memberorder'],
+          $selectedData['categoryids']);
+  $wpdb->query($wpdb->prepare("INSERT INTO {$style_table} (name, style_name, css, slider, memberid, memberorder, categoryids) VALUES ( %s, %s, %s, %s, %s, %s, %s )", $dupList));
 }
 
 ?>

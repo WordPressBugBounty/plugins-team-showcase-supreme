@@ -28,12 +28,9 @@ $total_template = 3;
    }
 
    if (!empty($_POST['clone']) && $_POST['clone'] == 'Clone') {
-      $nonce = $_REQUEST['_wpnonce'];
+        wpm_6310_validate_request('wpm_nonce_field_clone');
       $style_table = $wpdb->prefix . 'wpm_6310_style';
       
-      if (!wp_verify_nonce($nonce, 'wpm-nonce-field-clone')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
          $id = (int) $_POST['id'];
          $selectedData = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $id), ARRAY_A);
          $new_post = array(
@@ -66,14 +63,11 @@ $total_template = 3;
          );
 
          $wpdb->query($wpdb->prepare("INSERT INTO {$member_table} (name, designation, profile_details_type, profile_url, open_new_tab, profile_details, effect, image, hover_image, iconids, iconurl, category, contact_info, skills, post_id, template_id, thumbnail) VALUES ( %s, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s )", $dupList));
-      }
   }
 
    if (!empty($_POST['rearrange-icon-list-save']) && isset($_POST['member_id']) && is_numeric($_POST['member_id'])) {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-update-icon-order')) {
-         die('You do not have sufficient permissions to access this pageddd.');
-      } else {
+        wpm_6310_validate_request('wpm_6310_nonce_update_icon_order');
+      
          $selMember = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $_POST['member_id']), ARRAY_A);
          if($selMember['iconids']){
             $iconUrl = explode("||||", $selMember['iconurl']);
@@ -91,14 +85,9 @@ $total_template = 3;
                $wpdb->query($wpdb->prepare("UPDATE $member_table SET iconids = %s, iconurl = %s WHERE id = %d", $_POST['rearrange_list'], $url, $_POST['member_id']));
             }
          }
-      }
    }
    if (!empty($_POST['rearrange-skills-list-save']) && isset($_POST['member_id']) && is_numeric($_POST['member_id'])) {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-update-skills-order')) {
-         die('You do not have sufficient permissions to access this pageddd.');
-      } else {
-
+        wpm_6310_validate_request('wpm_6310_nonce_update_skills_order');
          $idList = explode("####||||####", $_POST['rearrange_list']);
          $selMember = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $_POST['member_id']), ARRAY_A);
          $iconList = explode("####||||####", $selMember['skills']); 
@@ -108,15 +97,10 @@ $total_template = 3;
          }
          $iconsArray = implode("####||||####", $iconsArray);
           $wpdb->query($wpdb->prepare("UPDATE $member_table SET skills = %s WHERE id = %d", $iconsArray, $_POST['member_id']));
-      }
    }
 
    if (!empty($_POST['rearrange-contact-list-save']) && isset($_POST['member_id']) && is_numeric($_POST['member_id'])) {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-update-contacts-order')) {
-         die('You do not have sufficient permissions to access this pageddd.');
-      } else {
-
+        wpm_6310_validate_request('wpm_6310_nonce_update_contacts_order');
          $idList = explode("####||||####", $_POST['rearrange_list']);
          $selMember = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $_POST['member_id']), ARRAY_A);
          $iconList = explode("####||||####", $selMember['contact_info']); 
@@ -126,25 +110,16 @@ $total_template = 3;
          }
          $iconsArray = implode("####||||####", $iconsArray);
           $wpdb->query($wpdb->prepare("UPDATE $member_table SET contact_info = %s WHERE id = %d", $iconsArray, $_POST['member_id']));
-      }
    }
 
 
    if (!empty($_POST['delete']) && isset($_POST['id']) && is_numeric($_POST['id'])) {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-nonce-field-delete')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_nonce_field_delete');
          $id = (int) $_POST['id'];
          $wpdb->query($wpdb->prepare("DELETE FROM {$member_table} WHERE id = %d", $id));
          wpm_6310_delete_member_from_category_info($id);
-      }
    } else if (!empty($_POST['save']) && $_POST['save'] == 'Save') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-add')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
-
+        wpm_6310_validate_request('wpm_6310_nonce_add');
          $new_post = array(
             'post_title'    => sanitize_text_field($_POST['name']),
             'post_content'  => 'Your post content goes here.',
@@ -179,7 +154,7 @@ $total_template = 3;
          $iconIds = "";
          $iconUrl = "";
 
-         if (isset($_POST['icon_link']) && $_POST['icon_link']) {
+         if (isset($_POST['icon_link'], $_POST['icon_name']) && is_array($_POST['icon_link']) && is_array($_POST['icon_name'])) {
             $icon_name = array_map('sanitize_text_field', $_POST['icon_name']);
             $icon_link = array_map('sanitize_text_field', $_POST['icon_link']);
             if ($icon_link) {
@@ -264,12 +239,9 @@ $total_template = 3;
                      post_id = %d,
                      template_id = %d,
                      thumbnail = %s", $myData));
-      }
    } else if (!empty($_POST['update']) && $_POST['update'] == 'Update') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-update')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_6310_nonce_update');
+     
          $id = (int) sanitize_text_field($_POST['eid']);
          $memberInfo = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $id), ARRAY_A);
          if((int) $memberInfo['post_id']) {
@@ -309,7 +281,7 @@ $total_template = 3;
 
          $iconIds = "";
          $iconUrl = "";
-         if (isset($_POST['icon_link']) && $_POST['icon_link']) {
+         if (isset($_POST['icon_link'], $_POST['icon_name']) && is_array($_POST['icon_link']) && is_array($_POST['icon_name'])) {
             $icon_name = array_map('sanitize_text_field', $_POST['icon_name']);
             $icon_link = array_map('sanitize_text_field', $_POST['icon_link']);
             if ($icon_link) {
@@ -397,19 +369,16 @@ $total_template = 3;
                            where id = %d", $myData));
 
          wpm_6310_update_all_category_member_info($id, $catid);                  
-      }
    } else if (!empty($_POST['edit']) && $_POST['edit'] == 'Edit') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-nonce-field-edit')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_nonce_field_edit');
+      
          $id = (int) $_POST['id'];
          $selMember = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $id), ARRAY_A);
          ?>
          <div id="wpm-6310-modal-edit" class="wpm-6310-modal" style="display: none">
             <div class="wpm-6310-modal-content wpm-6310-modal-lg">
                <form action="" method="post">
-                  <?php wp_nonce_field("wpm-6310-nonce-update") ?>
+                  <?php wp_nonce_field("wpm_6310_nonce_update") ?>
                   <input type="hidden" name="eid" value="<?php echo $id; ?>" />
                   <div class="wpm-6310-modal-header">
                      Edit Member
@@ -864,20 +833,17 @@ $total_template = 3;
 
       </script>
       <?php
-   }
 }
 else if (!empty($_POST['rearrange-contacts']) && $_POST['rearrange-contacts'] == 'Rearrange') {
-   $nonce = $_REQUEST['_wpnonce'];
-   if (!wp_verify_nonce($nonce, 'wpm-nonce-field-reorder-contacts')) {
-      die('You do not have sufficient permissions to access this page.');
-   } else {
+     wpm_6310_validate_request('wpm_nonce_field_reorder_contacts');
+  
       $id = (int) $_POST['id'];
    ?>
 
       <div id="wpm_6310_rearrange_team_modal" class="wpm-6310-modal" style="display: none">
          <div class="wpm-6310-modal-content wpm-6310-modal-sm">
             <form action="" method="post">
-               <?php wp_nonce_field("wpm-6310-nonce-update-contacts-order") ?>
+               <?php wp_nonce_field("wpm_6310_nonce_update_contacts_order") ?>
                <input type="hidden" name="member_id" value="<?php echo $id ?>" />
                <input type="hidden" name="rearrange_list" id="rearrange_list" value="" />
                <div class="wpm-6310-modal-header">
@@ -979,20 +945,16 @@ else if (!empty($_POST['rearrange-contacts']) && $_POST['rearrange-contacts'] ==
       </script>
 
 <?php
-   }
 }
 else if (!empty($_POST['rearrange-skills']) && $_POST['rearrange-skills'] == 'Rearrange') {
-   $nonce = $_REQUEST['_wpnonce'];
-   if (!wp_verify_nonce($nonce, 'wpm-nonce-field-reorder-skills')) {
-      die('You do not have sufficient permissions to access this page.');
-   } else {
+     wpm_6310_validate_request('wpm_nonce_field_reorder_skills');
       $id = (int) $_POST['id'];
    ?>
 
       <div id="wpm_6310_rearrange_team_modal" class="wpm-6310-modal" style="display: none">
          <div class="wpm-6310-modal-content wpm-6310-modal-sm">
             <form action="" method="post">
-               <?php wp_nonce_field("wpm-6310-nonce-update-skills-order") ?>
+               <?php wp_nonce_field("wpm_6310_nonce_update_skills_order") ?>
                <input type="hidden" name="member_id" value="<?php echo $id ?>" />
                <input type="hidden" name="rearrange_list" id="rearrange_list" value="" />
                <div class="wpm-6310-modal-header">
@@ -1095,20 +1057,17 @@ else if (!empty($_POST['rearrange-skills']) && $_POST['rearrange-skills'] == 'Re
 
 
    <?php
-   }
 }
 else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearrange') {
-   $nonce = $_REQUEST['_wpnonce'];
-   if (!wp_verify_nonce($nonce, 'wpm-nonce-field-reorder-icon')) {
-      die('You do not have sufficient permissions to access this page.');
-   } else {
+     wpm_6310_validate_request('wpm_nonce_field_reorder_icon');
+
       $id = (int) $_POST['id'];
    ?>
 
       <div id="wpm_6310_rearrange_team_modal" class="wpm-6310-modal" style="display: none">
          <div class="wpm-6310-modal-content wpm-6310-modal-sm">
             <form action="" method="post">
-               <?php wp_nonce_field("wpm-6310-nonce-update-icon-order") ?>
+               <?php wp_nonce_field("wpm_6310_nonce_update_icon_order") ?>
                <input type="hidden" name="member_id" value="<?php echo $id ?>" />
                <input type="hidden" name="rearrange_list" id="rearrange_list" value="" />
                <div class="wpm-6310-modal-header">
@@ -1214,7 +1173,6 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
 
 
    <?php
-   }
 }
 ?>
 
@@ -1258,7 +1216,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
       }
       if($conNo){
          echo '<div class="wpm_6310_tabs_panel_settings"><form method="post">
-                  ' . wp_nonce_field("wpm-nonce-field-reorder-icon") . '
+                  ' . wp_nonce_field("wpm_nonce_field_reorder_icon") . '
                   <input type="hidden" name="id" value="' . $value['id'] . '">
                   <button class="wpm-btn-primary wpm-margin-right-10  wpm-6310-change-order"  title="Rearrange  Contact"  type="submit" value="Rearrange" name="rearrange-icon">Change Order</button>
                   </form></div>'; 
@@ -1279,7 +1237,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                $skl = 1;
             }
             echo '<form method="post">
-          ' . wp_nonce_field("wpm-nonce-field-reorder-skills") . '
+          ' . wp_nonce_field("wpm_nonce_field_reorder_skills") . '
           <input type="hidden" name="id" value="' . $value['id'] . '">
           <button class="wpm-btn-primary wpm-margin-right-10 wpm-6310-change-order" title="Rearrange  Skills"  type="submit" value="Rearrange" name="rearrange-skills">Change Order</button>
           </form>';
@@ -1299,7 +1257,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
             }   
             if($skl){
                echo '<div class="wpm_6310_tabs_panel_settings"><form method="post">
-                     ' . wp_nonce_field("wpm-nonce-field-reorder-contacts") . '
+                     ' . wp_nonce_field("wpm_nonce_field_reorder_contacts") . '
                      <input type="hidden" name="id" value="' . $value['id'] . '">
                      <button class="wpm-btn-primary wpm-margin-right-10  wpm-6310-change-order"  title="Rearrange  Contact"  type="submit" value="Rearrange" name="rearrange-contacts">Change Order</button>
                      </form></div>';
@@ -1336,17 +1294,17 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
 
       echo '<td>
                  <form method="post">
-                   ' . wp_nonce_field("wpm-nonce-field-edit") . '
+                   ' . wp_nonce_field("wpm_nonce_field_edit") . '
                           <input type="hidden" name="id" value="' . $value['id'] . '">
                           <button class="wpm-btn-success" style="float:left; margin-right: 5px;"  title="Edit"  type="submit" value="Edit" name="edit"><i class="fas fa-edit" aria-hidden="true"></i></button>
                   </form>
                   <form method="post">
-                   ' . wp_nonce_field("wpm-nonce-field-clone") . '
+                   ' . wp_nonce_field("wpm_nonce_field_clone") . '
                           <input type="hidden" name="id" value="' . $value['id'] . '">
                           <button class="wpm-btn-primary" style="float:left; margin-right: 5px;"  title="Clone"  type="submit" value="Clone" name="clone" onclick="return confirm(\'Do you want to clone this member?\');"><i class="fas fa-clone" aria-hidden="true"></i></button>
                   </form>
                   <form method="post">
-                   ' . wp_nonce_field("wpm-nonce-field-delete") . '
+                   ' . wp_nonce_field("wpm_nonce_field_delete") . '
                           <input type="hidden" name="id" value="' . $value['id'] . '">
                           <button class="wpm-btn-danger" style="float:left"  title="Delete"  type="submit" value="delete" name="delete" onclick="return confirm(\'Do you want to delete?\');"><i class="far fa-times-circle" aria-hidden="true"></i></button>
                   </form>
@@ -1365,7 +1323,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
             <span class="wpm-6310-close">&times;</span>
          </div>
          <div class="wpm-6310-modal-body-form">
-            <?php wp_nonce_field("wpm-6310-nonce-add") ?>
+            <?php wp_nonce_field("wpm_6310_nonce_add") ?>
             <table border="0" width="100%" cellpadding="10" cellspacing="0">
                <tr>
                   <td style="width: 150px;"><label class="wpm-form-label" for="name">Full Name:</label></td>
@@ -1578,7 +1536,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
 <div id="wpm_6310_social_icon" class="wpm-6310-modal" style="display: none">
          <div class="wpm-6310-modal-content wpm-6310-modal-xl">
             <form action="" method="post">
-               <?php wp_nonce_field("wpm-6310-nonce-update-icon-order") ?>
+               <?php wp_nonce_field("wpm_6310_nonce_update_icon_order") ?>
               
                <input type="hidden" name="rearrange_list" id="rearrange_list" value="" />
                <div class="wpm-6310-modal-header">

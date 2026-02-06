@@ -6,10 +6,8 @@
     include wpm_6310_plugin_url . 'settings/helper/team-member-save.php';
 
     if (!empty($_POST['update_style_change']) && $_POST['update_style_change'] == 'Save' && $_POST['styleid'] != '') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm_nonce_field_form')) {
-        die('You do not have sufficient permissions to access this pagess.');
-      } else {
+        wpm_6310_validate_request('wpm_nonce_field_form');
+      
         $css = "";
         $css .= sanitize_text_field($_POST['item_per_row_data_desktop']) . "@@##@@" . sanitize_text_field($_POST['item_per_row_data_tablet']) . "@@##@@" . sanitize_text_field($_POST['item_per_row_data_mobile']);
         $css .= "|" . sanitize_text_field($_POST['effect_appearance']);
@@ -59,7 +57,6 @@
         //31 - 35
 
         include wpm_6310_plugin_url . 'settings/helper/slider_form_save.php';
-      }
     }
     $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
     $allStyle = explode("|", $styledata['css']);

@@ -20,10 +20,8 @@ if (!current_user_can('edit_others_pages')) {
    wpm_6310_color_picker_script();
 
    if (!empty($_POST['delete']) && isset($_POST['id']) && is_numeric($_POST['id'])) {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-nonce-field-delete')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_nonce_field_delete');
+      
          $id = (int) $_POST['id'];
          $style_table = $wpdb->prefix . 'wpm_6310_style';
          $data = $wpdb->get_results('SELECT * FROM ' . $style_table . ' ORDER BY id DESC', ARRAY_A);
@@ -45,12 +43,10 @@ if (!current_user_can('edit_others_pages')) {
             }
          }
          $wpdb->query($wpdb->prepare("DELETE FROM {$category_table} WHERE id = %d", $id));
-      }
+      
    } else if (!empty($_POST['save']) && $_POST['save'] == 'Save') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-add')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_6310_nonce_add');
+      
          $myData[0] = sanitize_text_field($_POST['name']);
          $myData[1] = "c-" . time();
          $myData[2] = sanitize_text_field($_POST['serial']);
@@ -65,12 +61,10 @@ if (!current_user_can('edit_others_pages')) {
           }
 
          $wpdb->query($wpdb->prepare("insert into $category_table SET name = %s, c_name = %s, serial = %s", $myData));
-      }
+      
    } else if (!empty($_POST['update']) && $_POST['update'] == 'Update') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-6310-nonce-update')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_6310_nonce_update');
+     
          $id = (int) sanitize_text_field($_POST['id']);
          $myData[0] = sanitize_text_field($_POST['name']);
          $myData[1] = sanitize_text_field($_POST['serial']);
@@ -86,12 +80,10 @@ if (!current_user_can('edit_others_pages')) {
           }
 
          $wpdb->query($wpdb->prepare("update $category_table SET name = %s, serial = %s where id=%d", $myData));
-      }
+      
    } else if (!empty($_POST['edit']) && $_POST['edit'] == 'Edit') {
-      $nonce = $_REQUEST['_wpnonce'];
-      if (!wp_verify_nonce($nonce, 'wpm-nonce-field-edit')) {
-         die('You do not have sufficient permissions to access this page.');
-      } else {
+        wpm_6310_validate_request('wpm_nonce_field_edit');
+      
          $id = (int) $_POST['id'];
          $selCategory = $wpdb->get_row($wpdb->prepare("SELECT * FROM $category_table WHERE id = %d ", $id), ARRAY_A);
    ?>
@@ -104,7 +96,7 @@ if (!current_user_can('edit_others_pages')) {
                      <span class="wpm-6310-close">&times;</span>
                   </div>
                   <div class="wpm-6310-modal-body-form">
-                     <?php wp_nonce_field("wpm-6310-nonce-update") ?>
+                     <?php wp_nonce_field("wpm_6310_nonce_update") ?>
                      <table border="0" width="100%" cellpadding="10" cellspacing="0">
                         <tr>
                            <td width="50%"><label class="wpm-form-label" for="icon_name">Category Name:</label></td>
@@ -135,7 +127,7 @@ if (!current_user_can('edit_others_pages')) {
             });
          </script>
    <?php
-      }
+      
    }
    ?>
 
@@ -154,12 +146,12 @@ if (!current_user_can('edit_others_pages')) {
          echo '<td>' . $value['serial'] . '</td>';         
          echo '<td>
                  <form method="post">
-                   ' . wp_nonce_field("wpm-nonce-field-edit") . '
+                   ' . wp_nonce_field("wpm_nonce_field_edit") . '
                           <input type="hidden" name="id" value="' . $value['id'] . '">
                           <button class="wpm-btn-success wpm-margin-right-10" style="float:left"  title="Edit"  type="submit" value="Edit" name="edit"><i class="fas fa-edit" aria-hidden="true"></i></button>  
                   </form>';
          echo     '<form method="post">
-                   ' . wp_nonce_field("wpm-nonce-field-delete") . '
+                   ' . wp_nonce_field("wpm_nonce_field_delete") . '
                           <input type="hidden" name="id" value="' . $value['id'] . '">
                           <button class="wpm-btn-danger" style="float:left"  title="Delete"  type="submit" value="delete" name="delete" onclick="return confirm(\'Do you want to delete?\');"><i class="far fa-times-circle" aria-hidden="true"></i></button>  
                   </form>';
@@ -177,7 +169,7 @@ if (!current_user_can('edit_others_pages')) {
                <span class="wpm-6310-close">&times;</span>
             </div>
             <div class="wpm-6310-modal-body-form">
-               <?php wp_nonce_field("wpm-6310-nonce-add") ?>
+               <?php wp_nonce_field("wpm_6310_nonce_add") ?>
                <table border="0" width="100%" cellpadding="10" cellspacing="0">
                   <tr>
                      <td width="50%"><label class="wpm-form-label" for="icon_name">Category Name:</label></td>

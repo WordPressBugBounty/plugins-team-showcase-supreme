@@ -3,10 +3,7 @@ if (!defined('ABSPATH'))
   exit;
 
 if (!empty($_POST['submit']) && $_POST['submit'] == 'Save' && $_POST['style'] != '') {
-  $nonce = $_REQUEST['_wpnonce'];
-  if (!wp_verify_nonce($nonce, 'wpm-nonce-field')) {
-    die('You do not have sufficient permissions to access this page.');
-  } else {
+    wpm_6310_validate_request('wpm_nonce_field');
     $name = sanitize_text_field($_POST['style_name']);
     $style_name = sanitize_text_field($_POST['style']);
     
@@ -25,6 +22,7 @@ if (!empty($_POST['submit']) && $_POST['submit'] == 'Save' && $_POST['style'] !=
       }
     }
 
+    
     $wpdb->query($wpdb->prepare("INSERT INTO {$style_table} (name, style_name, css, slider, memberid) VALUES ( %s, %s, %s, %s, %s )", array($name, $style_name, $css, $slider,  $membersId)));
     $redirect_id = $wpdb->insert_id;
 
@@ -35,7 +33,6 @@ if (!empty($_POST['submit']) && $_POST['submit'] == 'Save' && $_POST['style'] !=
     }
     echo '<script type="text/javascript"> document.location.href = "' . $url . '"; </script>';
     exit;
-  }
 }
 
 //Load Image
@@ -1310,7 +1307,7 @@ $icons = array(
         <div class="wpm-6310-close">&times;</div>
       </div>
       <div class="wpm-6310-modal-body-form">
-        <?php wp_nonce_field("wpm-nonce-field") ?>
+        <?php wp_nonce_field("wpm_nonce_field") ?>
         <input type="hidden" name="style" id="wpm-style-hidden" />
         <table border="0" width="100%" cellpadding="10" cellspacing="0">
           <tr>

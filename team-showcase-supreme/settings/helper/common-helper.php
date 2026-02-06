@@ -97,6 +97,7 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
 <div id="wpm_6310_rearrange_team_modal" class="wpm-6310-modal" style="display: none">
       <div class="wpm-6310-modal-content" style="padding-left: 15px; padding-right: 15px;">
          <form action="" method="post">
+         <?php wp_nonce_field("wpm_rearrange_action") ?>
             <input type="hidden" name="rearrange_id" value="<?php echo esc_attr($id) ?>" />
             <input type="hidden" name="rearrange_list" id="rearrange_list" value="<?php echo esc_attr($memList[0]) ?>" />
             <input type="hidden" name="rearrange_list_all" id="rearrange_list_all" value="" />
@@ -188,7 +189,7 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
    <div id="wpm_6310_rearrange_category_modal" class="wpm-6310-modal" style="display: none">
       <div class="wpm-6310-modal-content" style="padding-left: 15px; padding-right: 15px;">
          <form action="" method="post">
-         <?php wp_nonce_field("wpm-6310-nonce-rearrange-category") ?>
+         <?php wp_nonce_field("wpm_6310_nonce_rearrange_category") ?>
             <input type="hidden" name="category_rearrange_id" value="<?php echo esc_attr($id) ?>" />
             <input type="hidden" name="category_rearrange_list" id="category_rearrange_list" value="<?php echo esc_attr($selStyle['categoryids']); ?>" />
             <div class="wpm-6310-modal-header">
@@ -230,13 +231,13 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
    <div id="wpm_6310_add_new_media_modal" class="wpm-6310-modal" style="display: none">
       <div class="wpm-6310-modal-content wpm-6310-modal-md">
          <form action="" method="post">
+            <?php wp_nonce_field("wpm_6310_nonce_add_member") ?>
             <div class="wpm-6310-modal-header">
                Add/Edit Members
                <span class="wpm-6310-icon-close">&times;</span>
             </div>
             <div class="wpm-6310-modal-body-form">
                <input type="hidden" name="styleid" value="<?php echo esc_attr($id) ?>" />
-               <?php wp_nonce_field("wpm-6310-nonce-add-member") ?>
                <table border="0" width="100%" cellpadding="0" cellspacing="0" class="wpm-member-table">
                   <tr height="40" style="font-weight: bold">
                      <td></td>
@@ -339,7 +340,7 @@ function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL
             </div>
             <div class="wpm-6310-modal-body-form">
                <input type="hidden" name="styleid" value="<?php echo esc_attr($id) ?>" />
-               <?php wp_nonce_field("wpm-6310-nonce-add-category") ?>
+               <?php wp_nonce_field("wpm_6310_nonce_add_category") ?>
                <table border="0" width="100%" cellpadding="0" cellspacing="0" class="wpm-member-table">
                   <tr height="40" style="font-weight: bold">
                      <td></td>

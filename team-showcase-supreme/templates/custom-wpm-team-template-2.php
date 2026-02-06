@@ -10,7 +10,8 @@ Template Name: Custom WPM Team Template
 wp_enqueue_script('jquery');
 $font_awesome = wpm_6310_get_option('wpm_6310_font_awesome_status');
 if ($font_awesome != 1) {
-    wp_enqueue_style('wpm-font-awesome-all', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+    wp_enqueue_style('wpm-6310-font-awesome-new', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+    wp_enqueue_style('wpm-6310-font-awesome-old', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css');
 }
 
 $member_table = $wpdb->prefix . 'wpm_6310_member';
@@ -45,7 +46,7 @@ $text_array = array(
         margin: 2rem 0 3rem;
     }
 </style>
-<section>
+
     <div class="container">
         <div class="row">
             <div class="wpm-6310-details-wrapper">
@@ -211,7 +212,7 @@ $text_array = array(
             </div>
         </div>
     </div>
-</section>
+
 <style>
     .wpm-6310-details-content {
         box-sizing: border-box;

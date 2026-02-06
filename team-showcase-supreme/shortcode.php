@@ -139,7 +139,8 @@ if (file_exists(wpm_6310_plugin_url . "output/".esc_attr($template_name).".php")
   
    $font_awesome = wpm_6310_get_option('wpm_6310_font_awesome_status');
    if($font_awesome != 1){
-      wp_enqueue_style('wpm-font-awesome-all', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+      wp_enqueue_style('wpm-6310-font-awesome-new', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+      wp_enqueue_style('wpm-6310-font-awesome-old', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css');
    }
 
    if ($allSlider[0]) {
