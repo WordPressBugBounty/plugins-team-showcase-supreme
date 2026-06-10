@@ -2,8 +2,8 @@
 Contributors: wpmart
 Tags: team members, team showcase, our team, staff directory, team slider
 Requires at least: 4.6.14
-Tested up to: 6.9
-Stable tag: 8.6
+Tested up to: 7.0
+Stable tag: 8.7
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -182,6 +182,9 @@ If You acquired the Team Showcase with Slider and have not received it, please j
 
 
 == Changelog ==
+= 8.7 =
+* FEATURE – Bug fixed
+
 = 8.6 =
 * FEATURE – Fixed CSS issue
 
