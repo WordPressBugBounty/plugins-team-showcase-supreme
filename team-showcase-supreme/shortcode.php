@@ -197,7 +197,7 @@ if (file_exists(wpm_6310_plugin_url . "output/".esc_attr($template_name).".php")
    wp_enqueue_script('wpm-6310-common-output-js', plugins_url('assets/js/wpm-common-output.js', __FILE__));
 
    if ($styledata['memberorder']) {
-      echo "<style type='text/css'>" . $styledata['memberorder'] . "</style>";
+      echo "<style type='text/css'>" . wp_strip_all_tags($styledata['memberorder']) . "</style>";
    }
 }
 else {

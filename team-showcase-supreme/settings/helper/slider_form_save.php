@@ -526,6 +526,6 @@ $slider .= "|" . (isset($_POST['modal_06_skill_label_font_color']) ? sanitize_te
 
 /* 336 - 340 */
 
-$memberorder = $_POST['custom_css'];
+$memberorder = wp_strip_all_tags($_POST['custom_css']);
 
 $wpdb->query($wpdb->prepare("UPDATE $style_table SET name = %s, css = %s, slider = %s, memberorder=%s WHERE id = %d", sanitize_text_field($_POST['template_name']), $css, $slider, $memberorder, $styleId));

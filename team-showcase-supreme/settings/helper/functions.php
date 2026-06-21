@@ -3476,4 +3476,3 @@ function wpm_6310_validate_request($nonce_action) {
 			wp_die('Insufficient permissions.', 'Error', ['response' => 403]);
 	}
 }
-
