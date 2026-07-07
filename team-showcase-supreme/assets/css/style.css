@@ -58,6 +58,7 @@
 }
 .wpm-6310-header .wpm-6310-nav li.has-dropdown {
    position: relative;
+   z-index: 1;
 }
 ul.dropdown-menu {
    position: absolute;
@@ -175,7 +176,7 @@ ul.dropdown-menu li a.wpm-6310-active {
    border: 1px solid #ccc;
    background: #FFF;
    color: #000;
-   padding: 5px 10px;
+   padding: 11px 10px;
 }
 .wpm-btn-icon{
    padding: 0;
@@ -942,7 +943,7 @@ ul.wpm-6310-choose-icon li:hover{
 .wpm_6310_additonal_info{
    width: 100%;
    float: left;
-   margin-bottom: 10px;
+   margin-bottom: 20px;
 }
 .wpm_6310_additonal_info_1, .wpm_6310_additonal_info_2, .wpm_6310_additonal_info_3, .wpm_6310_additonal_info_4{
    float: left;
@@ -1280,7 +1281,7 @@ h1.wpm-6310-wpmart-all-plugins {
    background-color: #f2f2f2;
  }
 
-.rangeSlider,.rangeSlider__fill{display:block;box-shadow:inset 0 1px 3px rgba(0,0,0,.3);border-radius:10px}.rangeSlider{position:relative;background:#7f8c8d}.rangeSlider__horizontal{height:14px;width:35%;display:inline-block;margin-top:7px}.skills-info{display:block;margin:5px 0}input.skills-name{width:40%!important;display:inline-block;margin-right:2%}output{width:10%;height:30px;display:inline-block;color:green;font-size:16px}output:after{content:"%"}span.skills-delete{width:10%;height:30px;display:inline-block}.rangeSlider__fill{background:#16a085;position:absolute}.rangeSlider__fill__horizontal{height:100%;top:0;left:0}.rangeSlider__handle{border:1px solid #ccc;cursor:pointer;display:inline-block;width:30px;height:30px;position:absolute;background:#fff linear-gradient(rgba(255,255,255,0),rgba(0,0,0,.1));box-shadow:0 0 8px rgba(0,0,0,.3);border-radius:50%}.rangeSlider__handle__horizontal{top:-10px}.rangeSlider__handle:after{content:"";display:block;width:16px;height:16px;margin:auto;position:absolute;top:0;right:0;bottom:0;left:0;background-image:linear-gradient(rgba(0,0,0,.13),rgba(22,160,133,.8));border-radius:50%}
+.rangeSlider,.rangeSlider__fill{display:block;box-shadow:inset 0 1px 3px rgba(0,0,0,.3);border-radius:10px}.rangeSlider{position:relative;background:#7f8c8d}.rangeSlider__horizontal{height:14px;width:35%;display:inline-block;margin-top:7px}.skills-info{display:block;margin:5px 0;width:100%; float: left;}input.skills-name{width:40%!important;display:inline-block;margin-right:2%}output{width:10%;height:30px;display:inline-block;color:green;font-size:16px}output:after{content:"%"}span.skills-delete{width:10%;height:30px;display:inline-block}.rangeSlider__fill{background:#16a085;position:absolute}.rangeSlider__fill__horizontal{height:100%;top:0;left:0}.rangeSlider__handle{border:1px solid #ccc;cursor:pointer;display:inline-block;width:30px;height:30px;position:absolute;background:#fff linear-gradient(rgba(255,255,255,0),rgba(0,0,0,.1));box-shadow:0 0 8px rgba(0,0,0,.3);border-radius:50%}.rangeSlider__handle__horizontal{top:-10px}.rangeSlider__handle:after{content:"";display:block;width:16px;height:16px;margin:auto;position:absolute;top:0;right:0;bottom:0;left:0;background-image:linear-gradient(rgba(0,0,0,.13),rgba(22,160,133,.8));border-radius:50%}
 .wpm-6310-skill-msg{
    width: 100%;
    padding: 15px 0 0;
@@ -1358,4 +1359,82 @@ h1.wpm-6310-wpmart-all-plugins {
 .wpm-6310-video-references a:hover{
    background: #2296f3;
    color: #FFF;
+}
+
+/*#######################  Notification Style Start ################### */
+.wpm-6310-notifications {
+   margin: 25px 0 0;
+}
+.wpm-6310-notice {
+   position: relative;
+   display: flex;
+   align-items: flex-start;
+   gap: 20px;
+   padding: 28px 20px 10px;
+   border: 1px solid #c9dbff;
+   border-radius: 10px;
+   background: #f4f8ff;
+   box-sizing: border-box;
+}
+.wpm-6310-content {
+   flex: 1;
+}
+.wpm-6310-content p {
+   margin: 0 0 10px;
+   font-size: 14px;
+   line-height: 1.5;
+   color: #333;
+}
+.wpm-6310-content a {
+   color: #3366ff;
+   font-weight: 600;
+   text-decoration: none;
+}
+.wpm-6310-content a:hover {
+   text-decoration: underline;
+}
+.wpm-6310-icon {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 58px;
+   min-width: 58px;
+   height: 58px;
+   border-radius: 50%;
+   background: #046b04;
+   color: #fff;
+}
+.wpm-6310-icon .dashicons {
+   width: 32px;
+   height: 32px;
+   font-size: 32px;
+}
+.wpm-6310-notice-close {
+   position: absolute;
+   top: 15px;
+   right: 15px;
+   padding: 0;
+   border: 0;
+   background: transparent;
+   color: #8c8f94;
+   cursor: pointer;
+}
+.wpm-6310-notice-close .dashicons {
+   width: 20px;
+   height: 20px;
+   font-size: 20px;
+}
+.wpm-6310-notice-close:hover {
+   color: #d63638;
+}
+.wpm-6310-content p:first-of-type {
+   font-weight: 400; /* normal */
+}
+/*#######################  Notification Style End ################### */
+.wpm_6310_additonal_skills{
+   width: 100%;
+   float: left;
+}
+.wpm_6310_skills_new, .wpm_6310_icon_new, .wpm_6310_skills_new-edit{
+   margin-top: 5px;
 }

@@ -488,7 +488,7 @@ $total_template = 3;
                                  $i = 0;
                                  foreach ($iconList as $list) {
                                     ?>
-                                    <div style="margin-bottom: -6px; width: 100%; display: block;">
+                                    <div style="width: 100%; display: block;">
                                        <div class="wpm_6310_additonal_info_2">
                                           <select name="icon_name[]" class="wpm-form-input">
                                              <?php
@@ -512,7 +512,7 @@ $total_template = 3;
                                  }
                               } else {
                                  ?>
-                                 <div style="margin-bottom: -6px; width: 100%; display: block;">
+                                 <div style="width: 100%; display: block;">
                                     <div class="wpm_6310_additonal_info_2">
                                        <select name="icon_name[]" class="wpm-form-input">
                                           <?php
@@ -1416,7 +1416,7 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                   <td colspan="2">
                      <label class="wpm-form-label" for="social_icon">Social Icon <small>(Make Blank if you Don't want all)</small>:</label>
                      <br />
-                     <div style="margin-bottom: -6px; width: 100%; display: block;">
+                     <div style="width: 100%; display: block;">
                         <div class="wpm_6310_additonal_info_2">
                            <select name="icon_name[]" class="wpm-form-input">
                               <?php

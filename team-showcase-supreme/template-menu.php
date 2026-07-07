@@ -25,7 +25,10 @@ function wpm_template_01_10()
          $allowed_templates[] = sprintf('template-%02d', $i);
       }
       $styleId = (int) ($_GET['styleid']);
-      $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
+      $loading = wpm_6310_get_option('wpm_6310_loading_icon');
+      if(!$loading || strpos($loading, 'wpmart.org/wp-content') !== false){
+         $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';;
+      }
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
       
       // Validate and sanitize the style name
@@ -79,7 +82,10 @@ function wpm_template_11_20()
          $allowed_templates[] = sprintf('template-%02d', $i);
       }
       $styleId = (int) ($_GET['styleid']);
-      $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
+      $loading = wpm_6310_get_option('wpm_6310_loading_icon');
+      if(!$loading || strpos($loading, 'wpmart.org/wp-content') !== false){
+         $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';;
+      }
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
 
       // Validate and sanitize the style name
@@ -133,7 +139,10 @@ function wpm_template_21_30()
          $allowed_templates[] = sprintf('template-%02d', $i);
       }
       $styleId = (int) ($_GET['styleid']);
-      $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
+      $loading = wpm_6310_get_option('wpm_6310_loading_icon');
+      if(!$loading || strpos($loading, 'wpmart.org/wp-content') !== false){
+         $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';;
+      }
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
 
       // Validate and sanitize the style name
@@ -187,7 +196,10 @@ function wpm_template_31_40()
          $allowed_templates[] = sprintf('template-%02d', $i);
       }
       $styleId = (int) ($_GET['styleid']);
-      $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
+      $loading = wpm_6310_get_option('wpm_6310_loading_icon');
+      if(!$loading || strpos($loading, 'wpmart.org/wp-content') !== false){
+         $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';;
+      }
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
       // Validate and sanitize the style name
       $template_name = $styledata['style_name'];
@@ -241,7 +253,10 @@ function wpm_template_41_50()
          $allowed_templates[] = sprintf('template-%02d', $i);
       }
       $styleId = (int) ($_GET['styleid']);
-      $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
+      $loading = wpm_6310_get_option('wpm_6310_loading_icon');
+      if(!$loading || strpos($loading, 'wpmart.org/wp-content') !== false){
+         $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';;
+      }
       $styledata = $wpdb->get_row($wpdb->prepare("SELECT * FROM $style_table WHERE id = %d ", $styleId), ARRAY_A);
 
       // Validate and sanitize the style name

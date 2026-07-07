@@ -702,7 +702,7 @@ function wpm_6310_modal_settings_for_member_description($loading, $wpm_6310_plug
 
    //Loading
    $loading = wpm_6310_get_option('wpm_6310_loading_icon');
-   if(!$loading){
+   if(!$loading || strpos($loading, 'wpmart.org/wp-content') !== false){
       $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';
    }
 

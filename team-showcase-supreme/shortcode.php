@@ -68,8 +68,8 @@ $desktop_row = $rows[0];
 $tablet_row = isset($rows[1]) ? $rows[1] : 1;
 $mobile_row = isset($rows[2]) ? $rows[2] : 1;
 
-$loading = wpm_6310_get_option( 'wpm_6310_loading_icon');
-if(!$loading){
+$loading = wpm_6310_get_option('wpm_6310_loading_icon');
+if(!$loading || strpos($loading, 'wpmart.org/wp-content') !== false){
   $loading = wpm_6310_plugin_dir_url . 'assets/images/loading.gif';;
 }
 
