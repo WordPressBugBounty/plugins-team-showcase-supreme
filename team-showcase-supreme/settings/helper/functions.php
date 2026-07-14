@@ -1037,6 +1037,7 @@ function wpm_6310_check_license($key, $autoUpdate = false) {
 			'type'       => 'wpm'
 	);
 
+	$wpm_6310_selected_server = wpm_6310_get_option('wpm_6310_selected_server');
 	$url = $wpm_6310_selected_server == 2 || $wpm_6310_selected_server == '2' ? "https://demo.tcsesoft2.com/" : "https://demo.tcsesoft.com/";
 	$response = wp_remote_post($url, array("body" => $api_params));
 
