@@ -36,21 +36,29 @@ if($styledata['memberid']){
          $memList = explode('##||##', $memList[0]);
       }
       $idExist = explode(',', $memList[0]);
-      if($idExist){
+      if ($idExist) {
          $tempId = '';
+     
          foreach ($idExist as $ie) {
-            if (trim($ie) != '') {
-               if ($tempId != '') {
-                  $tempId .= ',';
-               }
-               $tempId .= $ie;
-            }
+             if (trim($ie) !== '') {
+                 if ($tempId !== '') {
+                     $tempId .= ',';
+                 }
+                 $tempId .= absint($ie); // Sanitize IDs
+             }
          }
-         if ($tempId == '') {
-            return;
+     
+         if ($tempId === '') {
+             return;
          }
-         $members = $wpdb->get_results("SELECT * FROM $member_table WHERE id in ({$tempId}) ORDER BY name asc", ARRAY_A);
-      }
+     
+         $members = $wpdb->get_results(
+             "SELECT * FROM {$member_table}
+              WHERE id IN ({$tempId})
+              ORDER BY FIELD(id, {$tempId})",
+             ARRAY_A
+         );
+     }
       else{
          return;
       }
