@@ -117,7 +117,7 @@ function wpm_6310_search_template($ids, $allSlider, $col){
 						
 						$selIcon = $wpdb->get_row("SELECT * FROM $icon_table WHERE id={$iconIds[$i]}", ARRAY_A);
 					if ($selIcon) {
-							echo "<li><a " . wpm_6310_external_link($iconUrl[$i], $relative) . "  title='" . esc_attr($selIcon['name']) . "'  id='wpm-social-link-".esc_attr($templateId)."-".esc_attr($memberId)."-".esc_attr($selIcon['id'])."'><i class='" . esc_attr($selIcon['class_name']) . "'></i></a></li>";
+							echo "<li><a rel='nofollow' " . wpm_6310_external_link($iconUrl[$i], $relative) . "  title='" . esc_attr($selIcon['name']) . "'  id='wpm-social-link-".esc_attr($templateId)."-".esc_attr($memberId)."-".esc_attr($selIcon['id'])."'><i class='" . esc_attr($selIcon['class_name']) . "'></i></a></li>";
 							$iconStyles .= "<style>#wpm-social-link-".esc_attr($templateId)."-".esc_attr($memberId)."-".esc_attr($selIcon['id'])."{border: {$borderWidth}px solid ".esc_attr($selIcon['bgcolor'])."; background-color: ".esc_attr($selIcon['bgcolor'])."; color: ".esc_attr($selIcon['color']).";} #wpm-social-link-".esc_attr($templateId)."-".esc_attr($memberId)."-".esc_attr($selIcon['id']).":hover{color: ".esc_attr($selIcon['bgcolor'])."; background-color: ".esc_attr($selIcon['color']).";} </style>";
 							$c++;
 							if ($c == $totalIcon) break;
@@ -348,7 +348,7 @@ function wpm_6310_team_member_details()
 				if ($iconIds[$i] != "" && $iconUrl[$i] != "") {
 					$selIcon = $wpdb->get_row("SELECT * FROM $icon_table WHERE id={$iconIds[$i]}", ARRAY_A);
 				if ($selIcon) {
-				$html .= "<a " . wpm_6310_external_link($iconUrl[$i]) . " data-social-modal='1'  title='" . esc_attr($selIcon['name']) . "'  id='wpm-modal-social-link-".esc_attr($ids)."-".esc_attr($selIcon['id'])."'><i class='" . esc_attr($selIcon['class_name']) . "'></i></a>";
+				$html .= "<a rel='nofollow' " . wpm_6310_external_link($iconUrl[$i]) . " data-social-modal='1'  title='" . esc_attr($selIcon['name']) . "'  id='wpm-modal-social-link-".esc_attr($ids)."-".esc_attr($selIcon['id'])."'><i class='" . esc_attr($selIcon['class_name']) . "'></i></a>";
 				$iconStyles .= "<style>#wpm-modal-social-link-".esc_attr($ids)."-".esc_attr($selIcon['id'])."{border: 1px solid ".esc_attr($selIcon['bgcolor'])."; background-color: ".esc_attr($selIcon['bgcolor'])."; color:".esc_attr($selIcon['color']).";} #wpm-modal-social-link-".esc_attr($ids)."-".esc_attr($selIcon['id']).":hover{color: ".esc_attr($selIcon['bgcolor'])."; background-color:".esc_attr($selIcon['color']).";} </style>";
 		}
 
@@ -492,7 +492,7 @@ function wpm_6310_team_member_info()
 				if ($iconIds[$i] != "" && $iconUrl[$i] != "") {
 					$selIcon = $wpdb->get_row("SELECT * FROM $icon_table WHERE id={$iconIds[$i]}", ARRAY_A);
 				if ($selIcon) {
-				$html .= "<a " . wpm_6310_external_link($iconUrl[$i]) . " data-social-modal='1'  title='" . esc_attr($selIcon['name']) . "'  id='wpm-social-link-".esc_attr($ids)."-".esc_attr($selIcon['id'])."'><i class='" . esc_attr($selIcon['class_name']) . "'></i></a>";
+				$html .= "<a rel='nofollow' " . wpm_6310_external_link($iconUrl[$i]) . " data-social-modal='1'  title='" . esc_attr($selIcon['name']) . "'  id='wpm-social-link-".esc_attr($ids)."-".esc_attr($selIcon['id'])."'><i class='" . esc_attr($selIcon['class_name']) . "'></i></a>";
 				$iconStyles .= "<style>#wpm-social-link-".esc_attr($ids)."-".esc_attr($selIcon['id'])."{border: 2px solid ".esc_attr($selIcon['bgcolor'])."; background-color: ".esc_attr($selIcon['bgcolor'])."; color:".esc_attr($selIcon['color']).";} #wpm-social-link-".esc_attr($ids)."-".esc_attr($selIcon['id']).":hover{color: ".esc_attr($selIcon['bgcolor'])."; background-color:".esc_attr($selIcon['color']).";} </style>";
 		}
 
@@ -2795,7 +2795,7 @@ function wpm_6310_read_more($readMoreActive, $ids, $allSlider, $cls = "", $attr 
         <div class='wpm_6310_read_more_".esc_attr($ids)."_text{$cls}' {$attr[0]}>";
 		if (isset($attr[1])) {
 				$target = $attr[2] == 1 ? " target='_blank'" : '';
-				echo "<a href='{$attr[1]}'{$target}>" . (isset($allSlider[312]) && $allSlider[312] ? esc_attr(wpm_6310_replace($allSlider[312])) : 'Read More') . "</a>";
+				echo "<a rel='nofollow' href='{$attr[1]}'{$target}>" . (isset($allSlider[312]) && $allSlider[312] ? esc_attr(wpm_6310_replace($allSlider[312])) : 'Read More') . "</a>";
 		}
 				else {
 					echo esc_attr(((isset($allSlider[312]) && $allSlider[312]) ? wpm_6310_replace($allSlider[312]) : 'Read More'));
@@ -3476,4 +3476,20 @@ function wpm_6310_validate_request($nonce_action) {
 	if (!current_user_can('manage_options')) {
 			wp_die('Insufficient permissions.', 'Error', ['response' => 403]);
 	}
+}
+
+
+
+function wpm_6310_social_icon_number_options($allSlider) {
+		echo '<td> <b>Social Icon Number</b> <div class="wpm-6310-pro">In the free version, you can display maximum 2 icons.</div> </td> <td> <select name="social_icon_number" id="social_icon_number" class="wpm-form-input">';
+    $selected = isset($allSlider[63]) ? (int) $allSlider[63] : 2;
+
+    for ($i = 1; $i <= 9; $i++) {
+        $items = ($i === 1) ? ' item' : ' items';
+        $is_selected = ($selected === $i) ? ' selected' : '';
+				$is_pro = ($i > 2) ? '(Pro)' : '';
+
+        echo "<option value='{$i}'{$is_selected}>{$i}{$items}{$is_pro}</option>";
+    }
+		echo '</select> </td>';
 }

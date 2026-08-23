@@ -30,7 +30,7 @@ if ($allSlider[0]) {
               <?php
                 wpm_6310_template_skills($value['skills'], $ids, $allSlider, $value['id']);
                 wpm_6310_extract_member_description($value, ((isset($allSlider[72]) && $allSlider[72] !== '') ? $allSlider[72] : $numberOfWords), $ids);
-                wpm_6310_social_icon($value['iconids'], $value['iconurl'], $allStyle[28], $value['id'], $ids, '', '', isset($allSlider['63']) ? $allSlider['63'] : 4);
+                wpm_6310_social_icon($value['iconids'], $value['iconurl'], $allStyle[28], $value['id'], $ids, '', '', 2);
               ?>
             </div>
           </figcaption>
@@ -70,7 +70,7 @@ if ($allSlider[0]) {
               <?php
                 wpm_6310_template_skills($value['skills'], $ids, $allSlider, $value['id']);
                 wpm_6310_extract_member_description($value, ((isset($allSlider[72]) && $allSlider[72] !== '') ? $allSlider[72] : $numberOfWords), $ids);
-                wpm_6310_social_icon($value['iconids'], $value['iconurl'], $allStyle[28], $value['id'], $ids, '', '', isset($allSlider['63']) ? $allSlider['63'] : 4);
+                wpm_6310_social_icon($value['iconids'], $value['iconurl'], $allStyle[28], $value['id'], $ids, '', '', 2);
               ?>
             </div>
           </figcaption>

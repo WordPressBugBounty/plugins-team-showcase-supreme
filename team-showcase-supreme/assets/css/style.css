@@ -201,8 +201,9 @@ ul.dropdown-menu li a.wpm-6310-active {
    background-color: #397139;
    color: #FFF;
 }
-.wpm-btn-primary:hover{
+.wpm-btn-primary:hover, .wpm-btn-primary:active{
    background-color: #24537c;
+   color: #FFF;
 }
 .wpm-btn-danger:hover{
    background-color: #d63a35;
@@ -467,6 +468,9 @@ input#icon-filter {
 }
 .wpm-6310-modal-content.wpm-6310-modal-sm{
    max-width: 400px;
+}
+.wpm-6310-modal-content.wpm-6310-modal-sm-l{
+   max-width: 550px;
 }
 .wpm-6310-modal-content.wpm-6310-modal-md{
    max-width: 700px;
@@ -1437,4 +1441,11 @@ h1.wpm-6310-wpmart-all-plugins {
 }
 .wpm_6310_skills_new, .wpm_6310_icon_new, .wpm_6310_skills_new-edit{
    margin-top: 5px;
+}
+
+#wpm-6310-modal-demo-data p{
+   padding: 0 15px;
+   font-size: 16px;
+   line-height: 24px;
+   color: #000;
 }

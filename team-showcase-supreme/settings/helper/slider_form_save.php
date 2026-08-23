@@ -94,7 +94,7 @@ $slider .= "|";
 //Social Icon Start
 $slider .= "|" . (isset($_POST['social_margin_top']) ?  sanitize_text_field($_POST['social_margin_top']) : '');
 $slider .= "|" . (isset($_POST['social_margin_bottom']) ?  sanitize_text_field($_POST['social_margin_bottom']) : '');
-$slider .= "|" . (isset($_POST['social_icon_number']) ?  sanitize_text_field($_POST['social_icon_number']) : 4);
+$slider .= "|" . (isset($_POST['social_icon_number']) ?  sanitize_text_field($_POST['social_icon_number']) : 2);
 $slider .= "|";
 $slider .= "|";
 /* 61 - 65 */

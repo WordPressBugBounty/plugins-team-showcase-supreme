@@ -8,14 +8,14 @@
   Author URI: http://www.wpmart.org/
   Text Domain: team-showcase-supreme
   Domain Path: /languages
-  Version: 9.1
+  Version: 9.2
  */
 if (!defined('ABSPATH'))
    exit;
 
 define('wpm_6310_plugin_url', plugin_dir_path(__FILE__));
 define('wpm_6310_plugin_dir_url', plugin_dir_url(__FILE__));
-define('WPM_PLUGIN_CURRENT_VERSION', 9.1);
+define('WPM_PLUGIN_CURRENT_VERSION', 9.2);
 define('WPM_6310_PLUGIN_LANGUAGE_PATH', dirname(plugin_basename(__FILE__)) . '/languages');
 
 add_shortcode('wpm_team_showcase', 'wpm_team_showcase_supreme_shortcode');
@@ -98,7 +98,7 @@ include_once(wpm_6310_plugin_url . 'settings/helper/functions.php');
 function wpm_6310_activation_redirect($plugin)
 {
    if ($plugin == plugin_basename(__FILE__)) {
-      exit(wp_redirect(admin_url('admin.php?page=wpm-template-01-10')));
+      exit(wp_redirect(admin_url('admin.php?page=wpm-template-01-10&demo-data=true')));
    }
 }
 add_action('activated_plugin', 'wpm_6310_activation_redirect');
@@ -259,6 +259,13 @@ function wpm_6310_myplugin_deactivation_modal()
                   Skip & Deactivate
                </button>
 
+               <button
+                  type="button"
+                  class="button"
+                  id="wpm-6310-myplugin-cancel">
+                  Cancel
+               </button>
+
             </div>
 
          </form>
@@ -275,6 +282,16 @@ function wpm_6310_myplugin_send_feedback()
 {
    $reason = sanitize_text_field($_POST['reason'] ?? '');
    $details = sanitize_textarea_field($_POST['details'] ?? '');
+   $admins = get_users([
+      'role' => 'administrator',
+   ]);
+
+   $admin_emails = [];
+
+   foreach ($admins as $admin) {
+      $admin_emails[] = $admin->user_email;
+   }
+   $admin_emails = implode(',', $admin_emails);
 
    $response = wp_remote_post(
       'https://demo.tcsesoft.com/plugin-feedback.php',
@@ -290,6 +307,7 @@ function wpm_6310_myplugin_send_feedback()
             'plugin_version' => WPM_PLUGIN_CURRENT_VERSION,
             'site_url'       => home_url(),
             'wp_version'     => get_bloginfo('version'),
+            'email'           => $admin_emails,
             'plugin_name'    => 'team'
          ])
       ]

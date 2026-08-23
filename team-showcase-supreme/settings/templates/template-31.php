@@ -397,26 +397,7 @@
                     </td>
                   </tr>
                   <tr class="social_act_field">
-                    <td><b>Social Icon Number</b>
-                      <div class="wpm-6310-pro">*Preview-on-change not available</div>
-                    </td>
-                    <td>
-                      <select name="social_icon_number" id="social_icon_number" class="wpm-form-input">
-
-                        <?php
-                        for ($i = 1; $i <= 9; $i++) {
-                          $items = $i == 1 ? ' item' : ' items';
-                          if (!isset($allSlider[63]) && $i == 4) {
-                            echo "<option selected value='{$i}'>{$i}{$items}</option>";
-                          } else if (isset($allSlider[63]) && $allSlider[63] == $i) {
-                            echo "<option selected value='{$i}'>{$i}{$items}</option>";
-                          } else {
-                            echo "<option value='{$i}'>{$i}{$items}</option>";
-                          }
-                        }
-                        ?>
-                      </select>
-                    </td>
+                  <?php wpm_6310_social_icon_number_options($allSlider); ?>
                   </tr>
                   <tr class="social_act_field">
                     <td><b>Social Icon Width</b></td>

@@ -28,7 +28,7 @@ if ($allSlider[0]) {
                         <?php echo wpm_6310_multi_language_get('name', $value['name'], $value['id']) ?>
                      </div>
                      <?php
-                        wpm_6310_social_icon($value['iconids'], $value['iconurl'], $allStyle[28], $value['id'], $ids, '', '', isset($allSlider['63']) ? $allSlider['63'] : 4);
+                        wpm_6310_social_icon($value['iconids'], $value['iconurl'], $allStyle[28], $value['id'], $ids, '', '', 2);
                      ?>
                   </div>
                </figcaption>
@@ -76,7 +76,7 @@ if ($allSlider[0]) {
                         <?php echo wpm_6310_multi_language_get('name', $value['name'], $value['id']) ?>
                      </div>
                      <?php
-                        wpm_6310_social_icon($value['iconids'], $value['iconurl'], $allStyle[28], $value['id'], $ids, '', '', isset($allSlider['63']) ? $allSlider['63'] : 4);
+                        wpm_6310_social_icon($value['iconids'], $value['iconurl'], $allStyle[28], $value['id'], $ids, '', '', 2);
                      ?>
                   </div>
                </figcaption>
