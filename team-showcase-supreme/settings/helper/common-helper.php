@@ -1,4 +1,9 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
+<?php
 
 function wpm_6310_add_new_media($id, $member_table, $icon_table, $members = NULL, $template = 0)
 {

@@ -8,14 +8,16 @@
   Author URI: http://www.wpmart.org/
   Text Domain: team-showcase-supreme
   Domain Path: /languages
-  Version: 9.2
+  License:           GPL v2 or later
+  License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+  Version: 9.3
  */
 if (!defined('ABSPATH'))
    exit;
 
 define('wpm_6310_plugin_url', plugin_dir_path(__FILE__));
 define('wpm_6310_plugin_dir_url', plugin_dir_url(__FILE__));
-define('WPM_PLUGIN_CURRENT_VERSION', 9.2);
+define('WPM_PLUGIN_CURRENT_VERSION', 9.3);
 define('WPM_6310_PLUGIN_LANGUAGE_PATH', dirname(plugin_basename(__FILE__)) . '/languages');
 
 add_shortcode('wpm_team_showcase', 'wpm_team_showcase_supreme_shortcode');

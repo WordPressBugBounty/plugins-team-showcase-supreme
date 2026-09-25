@@ -1,4 +1,9 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
+<?php
 
 $slider = sanitize_text_field($_POST['slider_activation']);
 $slider .= "|"; // . sanitize_text_field($_POST['effect_type']);

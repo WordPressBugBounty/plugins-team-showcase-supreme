@@ -1,5 +1,7 @@
 <?php
-// wpm_6310_template_skills(1, $ids, $allSlider, 1, '', 0);
+if (!defined('ABSPATH'))
+exit;
+
 if ($allSlider[0]) {
   echo "<div class='wpm-6310-carousel'>
   <div id='wpm-6310-slider-".esc_attr($ids)."' class='wpm-6310-owl-carousel'>";

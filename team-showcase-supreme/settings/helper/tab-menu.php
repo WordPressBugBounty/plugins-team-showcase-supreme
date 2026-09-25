@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
 <ul class="wpm-nav-tab">
   <li class="wpm-mytab active" id="tab1">General</li>
   <li class="wpm-mytab" id="tab2">Name</li>

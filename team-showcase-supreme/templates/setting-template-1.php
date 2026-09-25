@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
 <form action="" method="post">
   <?php wp_nonce_field("wpm_6310_nonce_field_form") ?>
   <div class="row wpm_6310_padding_15_px">

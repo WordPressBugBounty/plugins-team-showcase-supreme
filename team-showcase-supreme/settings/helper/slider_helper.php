@@ -1,4 +1,9 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
+<?php
         $customCSS = "
         .wpm-6310-row{
          width: 100%;

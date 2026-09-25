@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
+
 $numberOfWords = 12;
 
 if ($allSlider[0]) {

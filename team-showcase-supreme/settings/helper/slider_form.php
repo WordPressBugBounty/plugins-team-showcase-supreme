@@ -1,4 +1,9 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
+<?php
 if($template_id != 17 && $template_id != 20) {
 ?>  
 <style>

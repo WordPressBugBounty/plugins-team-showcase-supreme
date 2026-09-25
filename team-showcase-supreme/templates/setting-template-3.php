@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
 <form action="" method="post">
   <?php wp_nonce_field("wpm_6310_nonce_field_form") ?>
   <div class="wpm-6310-details-content-pro">This template is available on the pro version only. Only Administrator or Editor can view this page as demo.</div>

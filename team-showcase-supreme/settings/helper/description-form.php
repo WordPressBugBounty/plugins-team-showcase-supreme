@@ -1,4 +1,9 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
+<?php
   if(isset($allSlider[71])){
     $defaultDescription = false;
   }

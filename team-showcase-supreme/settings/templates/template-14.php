@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+  exit;
+?>
+
 <div class="wpm-6310">
   <div class="wpm-6310-sm">
     <?php

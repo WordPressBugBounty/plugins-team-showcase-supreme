@@ -1,4 +1,6 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
 
 global $wpdb;
 $style_table = $wpdb->prefix . 'wpm_6310_style';

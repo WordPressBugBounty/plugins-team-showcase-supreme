@@ -1,4 +1,9 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
+<?php
 function wpm_6310_get_user_roles(){
 	if(!function_exists('wp_get_current_user')) {
 	include(ABSPATH . "wp-includes/pluggable.php");
@@ -292,6 +297,7 @@ function wpm_6310_extract_member_description($dataObj, $count, $id, $suffix = ''
 function wpm_6310_team_member_details()
 {
 	global $wpdb;
+	wpm_6310_check_field_exists();
 	$icon_table = $wpdb->prefix . 'wpm_6310_icons';
 	$ids = (int) sanitize_text_field($_GET['ids']);
 	$styleId = (int) sanitize_text_field($_GET['styleId']);
@@ -299,6 +305,41 @@ function wpm_6310_team_member_details()
 	$progress_bar_animation = sanitize_text_field($_GET['progress_bar_animation']);
 	$progress_bar_border_radius = sanitize_text_field($_GET['progress_bar_border_radius']);
 	$found = true;
+
+	$temp = $wpdb->get_row(
+    $wpdb->prepare(
+        "SELECT * FROM {$wpdb->prefix}wpm_6310_style WHERE id = %d",
+        $styleId
+    ),
+			ARRAY_A
+	);
+
+	if (empty($temp) || empty($temp['memberid'])) {
+			echo wp_json_encode([]);
+			wp_die();
+	}
+
+	$memberGroups = explode('||##||', $temp['memberid']);
+
+	$members = explode(',', $memberGroups[0]);
+
+	$index = array_search((string) $ids, $members, true);
+
+	if ($index === false) {
+			echo wp_json_encode([]);
+			wp_die();
+	}
+	$memberInfo = $wpdb->get_row(
+    $wpdb->prepare(
+        "SELECT * FROM {$wpdb->prefix}wpm_6310_member WHERE id = %d",
+        $ids
+    ),
+    ARRAY_A
+	);
+
+	if (empty($memberInfo) || (int) $memberInfo['status'] !== 1) {
+			wp_send_json([]);
+	}
 
 	while($found) {
 		$temp = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wpm_6310_style WHERE id = %d ", $styleId), ARRAY_A);
@@ -439,6 +480,7 @@ function wpm_6310_team_member_details()
 function wpm_6310_team_member_info()
 {
 	global $wpdb;
+	wpm_6310_check_field_exists();
 	$icon_table = $wpdb->prefix . 'wpm_6310_icons';
 	$ids = (int) sanitize_text_field($_GET['ids']);
 	$styleId = (int) sanitize_text_field($_GET['styleId']);
@@ -446,6 +488,41 @@ function wpm_6310_team_member_info()
 	$progress_bar_animation = sanitize_text_field($_GET['progress_bar_animation']);
 	$progress_bar_border_radius = sanitize_text_field($_GET['progress_bar_border_radius']);
 	$found = true;
+
+	$temp = $wpdb->get_row(
+    $wpdb->prepare(
+        "SELECT * FROM {$wpdb->prefix}wpm_6310_style WHERE id = %d",
+        $styleId
+    ),
+			ARRAY_A
+	);
+
+	if (empty($temp) || empty($temp['memberid'])) {
+			echo wp_json_encode([]);
+			wp_die();
+	}
+
+	$memberGroups = explode('||##||', $temp['memberid']);
+
+	$members = explode(',', $memberGroups[0]);
+
+	$index = array_search((string) $ids, $members, true);
+
+	if ($index === false) {
+			echo wp_json_encode([]);
+			wp_die();
+	}
+	$memberInfo = $wpdb->get_row(
+    $wpdb->prepare(
+        "SELECT * FROM {$wpdb->prefix}wpm_6310_member WHERE id = %d",
+        $ids
+    ),
+    ARRAY_A
+	);
+
+	if (empty($memberInfo) || (int) $memberInfo['status'] !== 1) {
+			wp_send_json([]);
+	}
 	
 	while($found){
 		$temp = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wpm_6310_style WHERE id = %d ", $styleId), ARRAY_A);
@@ -634,6 +711,11 @@ function wpm_6310_check_field_exists(){
 	$wpdb->query("SHOW COLUMNS FROM {$member_table} LIKE 'thumbnail'");
 	if(!($wpdb->num_rows)){
 		$wpdb->query("alter table {$member_table} add (thumbnail text DEFAULT NULL)");
+	}
+
+	$wpdb->query("SHOW COLUMNS FROM {$member_table} LIKE 'status'");
+	if(!($wpdb->num_rows)){
+		$wpdb->query("alter table {$member_table} add (status tinyint DEFAULT '1')");
 	}
 
 	$sql4 = "CREATE TABLE IF NOT EXISTS $category_table (

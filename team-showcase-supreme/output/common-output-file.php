@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
 <style type="text/css">
 .wpm_6310_modal_template_before, .wpm_6310_modal_template_after{
   position: absolute;

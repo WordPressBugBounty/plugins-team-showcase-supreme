@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
 <script type="text/javascript">
     jQuery(document).ready(function () {
         jQuery("#wpm_effect_appearance").on("change", function () {

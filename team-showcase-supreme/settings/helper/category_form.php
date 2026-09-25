@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
 <div id="tab-10">
   <div class="row wpm_6310_padding_15_px">
     <div class="wpm-col-6">

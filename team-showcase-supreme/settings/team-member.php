@@ -27,201 +27,1069 @@ $total_template = 3;
       $allIconList .= "<option value=\"{$value['id']}\">{$value['name']}</option>";
    }
 
-   if (!empty($_POST['clone']) && $_POST['clone'] == 'Clone') {
-        wpm_6310_validate_request('wpm_nonce_field_clone');
-      $style_table = $wpdb->prefix . 'wpm_6310_style';
-      
-         $id = (int) $_POST['id'];
-         $selectedData = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $id), ARRAY_A);
-         $new_post = array(
-            'post_title'    => $selectedData['name'],
-            'post_content'  => 'Your post content goes here.',
-            'post_status'   => 'publish', // Publish the post immediately
-            'post_author'   => 1, // ID of the post author
-            'post_type'     => 'wpm_team', // Post type (you can use 'post', 'page', or any custom post type)
-          );
-          $post_id = wp_insert_post($new_post);
+   if (!empty($_POST['clone']) && 'Clone' === $_POST['clone']) {
 
-         $dupList = array(
-            $selectedData['name'], 
-            $selectedData['designation'], 
-            $selectedData['profile_details_type'],  
-            $selectedData['profile_url'],
-            $selectedData['open_new_tab'],
-            $selectedData['profile_details'],
-            $selectedData['effect'],
-            $selectedData['image'],
-            $selectedData['hover_image'],
-            $selectedData['iconids'],
-            $selectedData['iconurl'],
-            $selectedData['category'],
-            $selectedData['contact_info'],
-            $selectedData['skills'],
-            $post_id,
-            $selectedData['template_id'],
-            $selectedData['thumbnail']
-         );
-
-         $wpdb->query($wpdb->prepare("INSERT INTO {$member_table} (name, designation, profile_details_type, profile_url, open_new_tab, profile_details, effect, image, hover_image, iconids, iconurl, category, contact_info, skills, post_id, template_id, thumbnail) VALUES ( %s, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s )", $dupList));
+      wpm_6310_validate_request('wpm_nonce_field_clone');
+  
+      $style_table  = $wpdb->prefix . 'wpm_6310_style';
+      $member_table = $wpdb->prefix . 'wpm_6310_member';
+  
+      $id = isset($_POST['id'])
+          ? absint(wp_unslash($_POST['id']))
+          : 0;
+  
+      if (!$id) {
+          return;
+      }
+  
+      $selected_data = $wpdb->get_row(
+          $wpdb->prepare(
+              "SELECT * FROM {$member_table} WHERE id = %d",
+              $id
+          ),
+          ARRAY_A
+      );
+  
+      if (empty($selected_data)) {
+          return;
+      }
+  
+      /*
+       * Create a new Team post.
+       */
+      $new_post = array(
+          'post_title'   => sanitize_text_field($selected_data['name']),
+          'post_content' => 'Your post content goes here.',
+          'post_status'  => 'publish',
+          'post_author'  => get_current_user_id(),
+          'post_type'    => 'wpm_team',
+      );
+  
+      $post_id = wp_insert_post($new_post, true);
+  
+      if (is_wp_error($post_id)) {
+          return;
+      }
+  
+      /*
+       * Clone member data.
+       */
+      $dup_list = array(
+          sanitize_text_field($selected_data['name']),
+          sanitize_text_field($selected_data['designation']),
+          absint($selected_data['profile_details_type']),
+          esc_url_raw($selected_data['profile_url']),
+          absint($selected_data['open_new_tab']),
+          wp_kses_post($selected_data['profile_details']),
+          sanitize_text_field($selected_data['effect']),
+          esc_url_raw($selected_data['image']),
+          esc_url_raw($selected_data['hover_image']),
+          sanitize_text_field($selected_data['iconids']),
+          esc_url_raw($selected_data['iconurl']),
+          sanitize_text_field($selected_data['category']),
+          sanitize_textarea_field($selected_data['contact_info']),
+          sanitize_textarea_field($selected_data['skills']),
+          absint($post_id),
+          absint($selected_data['template_id']),
+          esc_url_raw($selected_data['thumbnail']),
+          absint($selected_data['status']),
+      );
+  
+      $wpdb->query(
+          $wpdb->prepare(
+              "INSERT INTO {$member_table}
+              (
+                  name,
+                  designation,
+                  profile_details_type,
+                  profile_url,
+                  open_new_tab,
+                  profile_details,
+                  effect,
+                  image,
+                  hover_image,
+                  iconids,
+                  iconurl,
+                  category,
+                  contact_info,
+                  skills,
+                  post_id,
+                  template_id,
+                  thumbnail,
+                  status
+              )
+              VALUES
+              (
+                  %s,
+                  %s,
+                  %d,
+                  %s,
+                  %d,
+                  %s,
+                  %s,
+                  %s,
+                  %s,
+                  %s,
+                  %s,
+                  %s,
+                  %s,
+                  %s,
+                  %d,
+                  %d,
+                  %s,
+                  %d
+              )",
+              $dup_list
+          )
+      );
   }
 
-   if (!empty($_POST['rearrange-icon-list-save']) && isset($_POST['member_id']) && is_numeric($_POST['member_id'])) {
-        wpm_6310_validate_request('wpm_6310_nonce_update_icon_order');
-      
-         $selMember = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $_POST['member_id']), ARRAY_A);
-         if($selMember['iconids']){
-            $iconUrl = explode("||||", $selMember['iconurl']);
-            $iconIds = explode(",", $selMember['iconids']);
-            $icons = explode(",", $_POST['rearrange_list']);
-            $url = "";
-            for($i = 0; $i < count($icons); $i++){
-               if($url){
-                  $url .= "||||";
-               }
-               $index = array_search($icons[$i], $iconIds);
-               $url .= $iconUrl[$index];
-            }
-            if($url){
-               $wpdb->query($wpdb->prepare("UPDATE $member_table SET iconids = %s, iconurl = %s WHERE id = %d", $_POST['rearrange_list'], $url, $_POST['member_id']));
-            }
-         }
-   }
-   if (!empty($_POST['rearrange-skills-list-save']) && isset($_POST['member_id']) && is_numeric($_POST['member_id'])) {
-        wpm_6310_validate_request('wpm_6310_nonce_update_skills_order');
-         $idList = explode("####||||####", $_POST['rearrange_list']);
-         $selMember = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $_POST['member_id']), ARRAY_A);
-         $iconList = explode("####||||####", $selMember['skills']); 
-         $iconsArray = [];
-         foreach($idList as $list){
-            $iconsArray[] = $iconList[$list];
-         }
-         $iconsArray = implode("####||||####", $iconsArray);
-          $wpdb->query($wpdb->prepare("UPDATE $member_table SET skills = %s WHERE id = %d", $iconsArray, $_POST['member_id']));
-   }
+  if (
+   !empty($_POST['rearrange-icon-list-save']) &&
+   isset($_POST['member_id']) &&
+   isset($_POST['rearrange_list'])) {
+         wpm_6310_validate_request('wpm_6310_nonce_update_icon_order');
 
-   if (!empty($_POST['rearrange-contact-list-save']) && isset($_POST['member_id']) && is_numeric($_POST['member_id'])) {
-        wpm_6310_validate_request('wpm_6310_nonce_update_contacts_order');
-         $idList = explode("####||||####", $_POST['rearrange_list']);
-         $selMember = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $_POST['member_id']), ARRAY_A);
-         $iconList = explode("####||||####", $selMember['contact_info']); 
-         $iconsArray = [];
-         foreach($idList as $list){
-            $iconsArray[] = $iconList[$list];
+         $member_id = absint(wp_unslash($_POST['member_id']));
+
+         $rearrange_list = sanitize_text_field(
+            wp_unslash($_POST['rearrange_list'])
+         );
+
+         if (!$member_id || '' === $rearrange_list) {
+            return;
          }
-         $iconsArray = implode("####||||####", $iconsArray);
-          $wpdb->query($wpdb->prepare("UPDATE $member_table SET contact_info = %s WHERE id = %d", $iconsArray, $_POST['member_id']));
-   }
+
+         $selMember = $wpdb->get_row(
+            $wpdb->prepare(
+               "SELECT * FROM {$member_table} WHERE id = %d",
+               $member_id
+            ),
+            ARRAY_A
+         );
+
+         if (
+            empty($selMember) ||
+            empty($selMember['iconids']) ||
+            empty($selMember['iconurl'])
+         ) {
+            return;
+         }
+
+         $icon_urls = explode('||||', $selMember['iconurl']);
+         $icon_ids  = explode(',', $selMember['iconids']);
+         $icons     = explode(',', $rearrange_list);
+
+         $reordered_urls = array();
+
+         foreach ($icons as $icon_id) {
+            $icon_id = sanitize_text_field($icon_id);
+
+            $index = array_search($icon_id, $icon_ids, true);
+
+            if (false !== $index && isset($icon_urls[$index])) {
+               $reordered_urls[] = $icon_urls[$index];
+            }
+         }
+
+         if (!empty($reordered_urls)) {
+            $url = implode('||||', $reordered_urls);
+
+            $wpdb->query(
+               $wpdb->prepare(
+                     "UPDATE {$member_table}
+                     SET iconids = %s, iconurl = %s
+                     WHERE id = %d",
+                     $rearrange_list,
+                     $url,
+                     $member_id
+               )
+            );
+         }
+      }
+
+      if (
+         !empty($_POST['rearrange-skills-list-save']) &&
+         isset($_POST['member_id']) &&
+         isset($_POST['rearrange_list'])
+     ) {
+         wpm_6310_validate_request('wpm_6310_nonce_update_skills_order');
+     
+         $member_id = absint(wp_unslash($_POST['member_id']));
+     
+         $rearrange_list = sanitize_text_field(
+             wp_unslash($_POST['rearrange_list'])
+         );
+     
+         if (!$member_id || '' === $rearrange_list) {
+             return;
+         }
+     
+         $selMember = $wpdb->get_row(
+             $wpdb->prepare(
+                 "SELECT skills FROM {$member_table} WHERE id = %d",
+                 $member_id
+             ),
+             ARRAY_A
+         );
+     
+         if (empty($selMember) || empty($selMember['skills'])) {
+             return;
+         }
+     
+         $id_list    = explode('####||||####', $rearrange_list);
+         $skill_list = explode('####||||####', $selMember['skills']);
+     
+         $skills = array();
+     
+         foreach ($id_list as $index) {
+             $index = absint($index);
+     
+             if (isset($skill_list[$index])) {
+                 $skills[] = $skill_list[$index];
+             }
+         }
+     
+         if (!empty($skills)) {
+             $skills_value = implode('####||||####', $skills);
+     
+             $wpdb->query(
+                 $wpdb->prepare(
+                     "UPDATE {$member_table}
+                      SET skills = %s
+                      WHERE id = %d",
+                     $skills_value,
+                     $member_id
+                 )
+             );
+         }
+     }
+
+     if (
+      !empty($_POST['rearrange-contact-list-save']) &&
+      isset($_POST['member_id']) &&
+      isset($_POST['rearrange_list'])
+  ) {
+      wpm_6310_validate_request('wpm_6310_nonce_update_contacts_order');
+  
+      $member_id = absint(wp_unslash($_POST['member_id']));
+  
+      $rearrange_list = sanitize_text_field(
+          wp_unslash($_POST['rearrange_list'])
+      );
+  
+      if (!$member_id || '' === $rearrange_list) {
+          return;
+      }
+  
+      $selMember = $wpdb->get_row(
+          $wpdb->prepare(
+              "SELECT contact_info FROM {$member_table} WHERE id = %d",
+              $member_id
+          ),
+          ARRAY_A
+      );
+  
+      if (empty($selMember) || empty($selMember['contact_info'])) {
+          return;
+      }
+  
+      $id_list      = explode('####||||####', $rearrange_list);
+      $contact_list = explode('####||||####', $selMember['contact_info']);
+  
+      $contacts = array();
+  
+      foreach ($id_list as $index) {
+          $index = absint($index);
+  
+          if (isset($contact_list[$index])) {
+              $contacts[] = $contact_list[$index];
+          }
+      }
+  
+      if (!empty($contacts)) {
+          $contact_value = implode('####||||####', $contacts);
+  
+          $wpdb->query(
+              $wpdb->prepare(
+                  "UPDATE {$member_table}
+                   SET contact_info = %s
+                   WHERE id = %d",
+                  $contact_value,
+                  $member_id
+              )
+          );
+      }
+  }
 
 
    if (!empty($_POST['delete']) && isset($_POST['id']) && is_numeric($_POST['id'])) {
-        wpm_6310_validate_request('wpm_nonce_field_delete');
-         $id = (int) $_POST['id'];
-         $wpdb->query($wpdb->prepare("DELETE FROM {$member_table} WHERE id = %d", $id));
-         wpm_6310_delete_member_from_category_info($id);
+      if (
+         !empty($_POST['delete']) &&
+         isset($_POST['id'])
+     ) {
+         wpm_6310_validate_request('wpm_nonce_field_delete');
+     
+         $id = absint(wp_unslash($_POST['id']));
+     
+         if ($id) {
+             $wpdb->query(
+                 $wpdb->prepare(
+                     "DELETE FROM {$member_table} WHERE id = %d",
+                     $id
+                 )
+             );
+     
+             wpm_6310_delete_member_from_category_info($id);
+         }
+     }
    } else if (!empty($_POST['save']) && $_POST['save'] == 'Save') {
-        wpm_6310_validate_request('wpm_6310_nonce_add');
+      if (
+         !empty($_POST['save']) &&
+         'Save' === sanitize_text_field(wp_unslash($_POST['save']))
+     ) {
+         wpm_6310_validate_request('wpm_6310_nonce_add');
+     
+         /*
+          * ---------------------------------------------------------
+          * Basic member information
+          * ---------------------------------------------------------
+          */
+     
+         $name = isset($_POST['name'])
+             ? sanitize_text_field(wp_unslash($_POST['name']))
+             : '';
+     
+         $designation = isset($_POST['designation'])
+             ? sanitize_text_field(wp_unslash($_POST['designation']))
+             : '';
+     
+         $profile_details_type = isset($_POST['pd'])
+             ? absint(wp_unslash($_POST['pd']))
+             : 0;
+     
+         $effect = isset($_POST['effect'])
+             ? sanitize_text_field(wp_unslash($_POST['effect']))
+             : '';
+     
+         /*
+          * ---------------------------------------------------------
+          * Profile information
+          * ---------------------------------------------------------
+          */
+     
+         $profile_url     = '';
+         $open_new_tab    = 0;
+         $profile_details = '';
+     
+         if (1 === $profile_details_type) {
+     
+             $profile_url = isset($_POST['url'])
+                 ? esc_url_raw(wp_unslash($_POST['url']))
+                 : '';
+     
+             $open_new_tab = isset($_POST['new_tab'])
+                 ? absint(wp_unslash($_POST['new_tab']))
+                 : 0;
+     
+         } elseif (
+             2 === $profile_details_type ||
+             3 === $profile_details_type
+         ) {
+     
+             /*
+              * This field may contain HTML.
+              */
+             $profile_details = isset($_POST['profile_details_new'])
+                 ? wp_kses_post(wp_unslash($_POST['profile_details_new']))
+                 : '';
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Images
+          * ---------------------------------------------------------
+          */
+     
+         $image = isset($_POST['image'])
+             ? esc_url_raw(wp_unslash($_POST['image']))
+             : '';
+     
+         $hover_image = isset($_POST['hover_image'])
+             ? esc_url_raw(wp_unslash($_POST['hover_image']))
+             : '';
+     
+         /*
+          * ---------------------------------------------------------
+          * Create WordPress Team post
+          * ---------------------------------------------------------
+          */
+     
          $new_post = array(
-            'post_title'    => sanitize_text_field($_POST['name']),
-            'post_content'  => 'Your post content goes here.',
-            'post_status'   => 'publish', // Publish the post immediately
-            'post_author'   => 1, // ID of the post author
-            'post_type'     => 'wpm_team', // Post type (you can use 'post', 'page', or any custom post type)
-          );
-          $post_id = wp_insert_post($new_post);
-
-         $myData = array();
-         $myData[0] = sanitize_text_field($_POST['name']);
-         $myData[1] = sanitize_text_field($_POST['designation']);
-         $myData[2] = sanitize_text_field($_POST['pd']);
-         if ($myData[2] == 1) {
-            $myData[3] = sanitize_text_field($_POST['url']);
-            $myData[4] = sanitize_text_field($_POST['new_tab']);
-            $myData[5] = "";
-            $myData[6] = "";
-         } else if ($myData[2] == 2  || $myData[2] == 3) {
-            $myData[3] = "";
-            $myData[4] = "";
-            $myData[5] = $_POST['profile_details_new'];
-            $myData[6] = sanitize_text_field($_POST['effect']);
+             'post_title'   => $name,
+             'post_content' => 'Your post content goes here.',
+             'post_status'  => 'publish',
+             'post_author'  => get_current_user_id(),
+             'post_type'    => 'wpm_team',
+         );
+     
+         $post_id = wp_insert_post($new_post, true);
+     
+         /*
+          * Stop if WordPress could not create the post.
+          */
+         if (is_wp_error($post_id)) {
+             return;
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Icons
+          * ---------------------------------------------------------
+          *
+          * iconids:
+          * icon1,icon2,icon3
+          *
+          * iconurl:
+          * url1||||url2||||url3
+          *
+          * The positions must match.
+          * ---------------------------------------------------------
+          */
+     
+         $icon_ids = '';
+         $icon_url = '';
+     
+         if (
+             isset($_POST['icon_link'], $_POST['icon_name']) &&
+             is_array($_POST['icon_link']) &&
+             is_array($_POST['icon_name'])
+         ) {
+             $icon_links = wp_unslash($_POST['icon_link']);
+             $icon_names = wp_unslash($_POST['icon_name']);
+     
+             foreach ($icon_links as $key => $icon_link) {
+     
+                 /*
+                  * Make sure the corresponding icon name exists.
+                  */
+                 if (!isset($icon_names[$key])) {
+                     continue;
+                 }
+     
+                 $icon_link = esc_url_raw($icon_link);
+                 $icon_name = sanitize_text_field($icon_names[$key]);
+     
+                 if ('' === $icon_link || '' === $icon_name) {
+                     continue;
+                 }
+     
+                 if ('' !== $icon_ids) {
+                     $icon_ids .= ',';
+                     $icon_url .= '||||';
+                 }
+     
+                 $icon_ids .= $icon_name;
+                 $icon_url .= $icon_link;
+             }
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Categories
+          * ---------------------------------------------------------
+          */
+     
+         $category_list = '';
+         $category_ids  = array();
+     
+         if (
+             isset($_POST['catid']) &&
+             is_array($_POST['catid'])
+         ) {
+             $category_ids = array_map(
+                 'absint',
+                 wp_unslash($_POST['catid'])
+             );
+     
+             /*
+              * Remove empty/zero category IDs.
+              */
+             $category_ids = array_filter($category_ids);
+     
+             /*
+              * Keep your existing database format:
+              *
+              * 1 2 3
+              */
+             $category_list = implode(' ', $category_ids);
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Contact information
+          * ---------------------------------------------------------
+          *
+          * Stored format:
+          *
+          * Label||||Details####||||####Label||||Details
+          * ---------------------------------------------------------
+          */
+     
+         $contacts = '';
+     
+         if (
+             isset($_POST['contact_label'], $_POST['contact_details']) &&
+             is_array($_POST['contact_label']) &&
+             is_array($_POST['contact_details'])
+         ) {
+             $contact_labels  = wp_unslash($_POST['contact_label']);
+             $contact_details = wp_unslash($_POST['contact_details']);
+     
+             $contact_items = array();
+     
+             foreach ($contact_labels as $key => $label) {
+     
+                 $label = sanitize_text_field($label);
+     
+                 $details = isset($contact_details[$key])
+                     ? sanitize_text_field($contact_details[$key])
+                     : '';
+     
+                 /*
+                  * Skip completely empty contact.
+                  */
+                 if ('' === $label && '' === $details) {
+                     continue;
+                 }
+     
+                 $contact_items[] = $label . '||||' . $details;
+             }
+     
+             $contacts = implode(
+                 '####||||####',
+                 $contact_items
+             );
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Skills
+          * ---------------------------------------------------------
+          *
+          * Stored format:
+          *
+          * Skill||||Rating####||||####Skill||||Rating
+          * ---------------------------------------------------------
+          */
+     
+         $skills = '';
+     
+         if (
+             isset($_POST['skills_name'], $_POST['skills_rating']) &&
+             is_array($_POST['skills_name']) &&
+             is_array($_POST['skills_rating'])
+         ) {
+             $skill_names   = wp_unslash($_POST['skills_name']);
+             $skill_ratings = wp_unslash($_POST['skills_rating']);
+     
+             $skill_items = array();
+     
+             foreach ($skill_names as $key => $skill_name) {
+     
+                 $skill_name = sanitize_text_field($skill_name);
+     
+                 $skill_rating = isset($skill_ratings[$key])
+                     ? sanitize_text_field($skill_ratings[$key])
+                     : '';
+     
+                 /*
+                  * Keep your original requirement:
+                  * skill name must contain more than 1 character.
+                  */
+                 if (strlen($skill_name) <= 1) {
+                     continue;
+                 }
+     
+                 $skill_items[] = $skill_name . '||||' . $skill_rating;
+             }
+     
+             $skills = implode(
+                 '####||||####',
+                 $skill_items
+             );
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Template / Thumbnail / Status
+          * ---------------------------------------------------------
+          */
+     
+         $template_id = isset($_POST['template_id'])
+             ? absint(wp_unslash($_POST['template_id']))
+             : 0;
+     
+         $thumbnail = isset($_POST['thumbnail'])
+             ? esc_url_raw(wp_unslash($_POST['thumbnail']))
+             : '';
+     
+         $status = isset($_POST['status'])
+             ? absint(wp_unslash($_POST['status']))
+             : 0;
+     
+         /*
+          * ---------------------------------------------------------
+          * Insert member into custom table
+          * ---------------------------------------------------------
+          */
+     
+         $inserted = $wpdb->query(
+             $wpdb->prepare(
+                 "INSERT INTO {$member_table}
+                 (
+                     name,
+                     designation,
+                     profile_details_type,
+                     profile_url,
+                     open_new_tab,
+                     profile_details,
+                     effect,
+                     image,
+                     iconids,
+                     iconurl,
+                     category,
+                     contact_info,
+                     hover_image,
+                     skills,
+                     post_id,
+                     template_id,
+                     thumbnail,
+                     status
+                 )
+                 VALUES
+                 (
+                     %s,
+                     %s,
+                     %d,
+                     %s,
+                     %d,
+                     %s,
+                     %s,
+                     %s,
+                     %s,
+                     %s,
+                     %s,
+                     %s,
+                     %s,
+                     %s,
+                     %d,
+                     %d,
+                     %s,
+                     %d
+                 )",
+                 $name,
+                 $designation,
+                 $profile_details_type,
+                 $profile_url,
+                 $open_new_tab,
+                 $profile_details,
+                 $effect,
+                 $image,
+                 $icon_ids,
+                 $icon_url,
+                 $category_list,
+                 $contacts,
+                 $hover_image,
+                 $skills,
+                 $post_id,
+                 $template_id,
+                 $thumbnail,
+                 $status
+             )
+         );
+     
+         /*
+          * ---------------------------------------------------------
+          * If database insert failed, remove the newly created post
+          * to prevent an orphaned wpm_team post.
+          * ---------------------------------------------------------
+          */
+     
+         if (false === $inserted) {
+             wp_delete_post($post_id, true);
+             return;
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Update category/member relationship
+          * ---------------------------------------------------------
+          *
+          * If your function needs the new member ID, you can use:
+          *
+          * $member_id = $wpdb->insert_id;
+          *
+          * ---------------------------------------------------------
+          */
+     
+         $member_id = absint($wpdb->insert_id);
+     
+         if ($member_id && !empty($category_ids)) {
+             wpm_6310_update_all_category_member_info(
+                 $member_id,
+                 $category_ids
+             );
+         }
+     }
+   } else if (!empty($_POST['update']) && $_POST['update'] == 'Update') {
+      if (
+         !empty($_POST['update']) &&
+         'Update' === sanitize_text_field(wp_unslash($_POST['update']))
+     ) {
+         wpm_6310_validate_request('wpm_6310_nonce_update');
+     
+         /*
+          * ---------------------------------------------------------
+          * Member ID
+          * ---------------------------------------------------------
+          */
+     
+         $id = isset($_POST['eid'])
+             ? absint(wp_unslash($_POST['eid']))
+             : 0;
+     
+         if (!$id) {
+             return;
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Get existing member information
+          * ---------------------------------------------------------
+          */
+     
+         $member_info = $wpdb->get_row(
+             $wpdb->prepare(
+                 "SELECT post_id
+                  FROM {$member_table}
+                  WHERE id = %d",
+                 $id
+             ),
+             ARRAY_A
+         );
+     
+         if (empty($member_info)) {
+             return;
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Basic member information
+          * ---------------------------------------------------------
+          */
+     
+         $name = isset($_POST['name'])
+             ? sanitize_text_field(wp_unslash($_POST['name']))
+             : '';
+     
+         $designation = isset($_POST['designation'])
+             ? sanitize_text_field(wp_unslash($_POST['designation']))
+             : '';
+     
+         $profile_details_type = isset($_POST['pd'])
+             ? absint(wp_unslash($_POST['pd']))
+             : 0;
+     
+         $effect = isset($_POST['effect'])
+             ? sanitize_text_field(wp_unslash($_POST['effect']))
+             : '';
+     
+         /*
+          * ---------------------------------------------------------
+          * Profile information
+          * ---------------------------------------------------------
+          */
+     
+         $profile_url     = '';
+         $open_new_tab    = 0;
+         $profile_details = '';
+     
+         if (1 === $profile_details_type) {
+     
+             $profile_url = isset($_POST['url'])
+                 ? esc_url_raw(wp_unslash($_POST['url']))
+                 : '';
+     
+             $open_new_tab = isset($_POST['new_tab'])
+                 ? absint(wp_unslash($_POST['new_tab']))
+                 : 0;
+     
+         } elseif (
+             2 === $profile_details_type ||
+             3 === $profile_details_type
+         ) {
+     
+             /*
+              * profile_details_new may contain HTML.
+              */
+             $profile_details = isset($_POST['profile_details_new'])
+                 ? wp_kses_post(wp_unslash($_POST['profile_details_new']))
+                 : '';
+         }
+     
+         /*
+          * ---------------------------------------------------------
+          * Images
+          * ---------------------------------------------------------
+          */
+     
+         $image = isset($_POST['image'])
+             ? esc_url_raw(wp_unslash($_POST['image']))
+             : '';
+     
+         $hover_image = isset($_POST['hover_image'])
+             ? esc_url_raw(wp_unslash($_POST['hover_image']))
+             : '';
+     
+         /*
+          * ---------------------------------------------------------
+          * Get existing WordPress Team post ID
+          * ---------------------------------------------------------
+          */
+     
+         $post_id = !empty($member_info['post_id'])
+             ? absint($member_info['post_id'])
+             : 0;
+     
+         /*
+          * ---------------------------------------------------------
+          * Create WordPress Team post if one doesn't exist
+          * ---------------------------------------------------------
+          */
+     
+         if (!$post_id) {
+     
+             $new_post = array(
+                 'post_title'   => $name,
+                 'post_content' => 'Your post content goes here.',
+                 'post_status'  => 'publish',
+                 'post_author'  => get_current_user_id(),
+                 'post_type'    => 'wpm_team',
+             );
+     
+             $post_id = wp_insert_post($new_post, true);
+     
+             if (is_wp_error($post_id)) {
+                 return;
+             }
          } else {
-            $myData[3] = "";
-            $myData[4] = "";
-            $myData[5] = "";
-            $myData[6] = "";
+     
+             /*
+              * Update the existing Team post title.
+              */
+             wp_update_post(
+                 array(
+                     'ID'         => $post_id,
+                     'post_title' => $name,
+                 )
+             );
          }
-         $myData[7] = sanitize_text_field($_POST['image']);
-
-         $iconIds = "";
-         $iconUrl = "";
-
-         if (isset($_POST['icon_link'], $_POST['icon_name']) && is_array($_POST['icon_link']) && is_array($_POST['icon_name'])) {
-            $icon_name = array_map('sanitize_text_field', $_POST['icon_name']);
-            $icon_link = array_map('sanitize_text_field', $_POST['icon_link']);
-            if ($icon_link) {
-               foreach ($icon_link as $dkey => $dvalue) {
-                  if ($dvalue) {
-                     if ($iconIds) {
-                        $iconIds .= ",";
-                        $iconUrl .= "||||";
-                     }
-                     $iconIds .= $icon_name[$dkey];
-                     $iconUrl .= $icon_link[$dkey];
-                  }
-               }
-            }
+     
+         /*
+          * ---------------------------------------------------------
+          * Icons
+          * ---------------------------------------------------------
+          *
+          * iconids:
+          * icon1,icon2,icon3
+          *
+          * iconurl:
+          * url1||||url2||||url3
+          * ---------------------------------------------------------
+          */
+     
+         $icon_ids = '';
+         $icon_url = '';
+     
+         if (
+             isset($_POST['icon_link'], $_POST['icon_name']) &&
+             is_array($_POST['icon_link']) &&
+             is_array($_POST['icon_name'])
+         ) {
+             $icon_links = wp_unslash($_POST['icon_link']);
+             $icon_names = wp_unslash($_POST['icon_name']);
+     
+             foreach ($icon_links as $key => $icon_link) {
+     
+                 /*
+                  * Make sure the corresponding icon name exists.
+                  */
+                 if (!isset($icon_names[$key])) {
+                     continue;
+                 }
+     
+                 $icon_link = esc_url_raw($icon_link);
+                 $icon_name = sanitize_text_field($icon_names[$key]);
+     
+                 if ('' === $icon_link || '' === $icon_name) {
+                     continue;
+                 }
+     
+                 if ('' !== $icon_ids) {
+                     $icon_ids .= ',';
+                     $icon_url .= '||||';
+                 }
+     
+                 $icon_ids .= $icon_name;
+                 $icon_url .= $icon_link;
+             }
          }
-         $myData[8] = $iconIds;
-         $myData[9] = $iconUrl;
-
-         $catList = "";
-         $catid = [];
-         if (isset($_POST['catid']) && $_POST['catid']) {
-            $catid = array_map('sanitize_text_field', $_POST['catid']);
-            foreach ($catid as $cat) {
-               if($catList){
-                  $catList .= " ";
-               }
-               $catList .= "{$cat}";
-            }
+     
+         /*
+          * ---------------------------------------------------------
+          * Categories
+          * ---------------------------------------------------------
+          *
+          * Keep the existing format:
+          *
+          * 1 2 3
+          * ---------------------------------------------------------
+          */
+     
+         $category_list = '';
+         $category_ids  = array();
+     
+         if (
+             isset($_POST['catid']) &&
+             is_array($_POST['catid'])
+         ) {
+             $category_ids = array_map(
+                 'absint',
+                 wp_unslash($_POST['catid'])
+             );
+     
+             $category_ids = array_filter($category_ids);
+     
+             $category_list = implode(' ', $category_ids);
          }
-         $myData[10] = $catList;
-
-         $contacts = "";
-         if (isset($_POST['contact_label']) && $_POST['contact_label']) {
-            $contact_label = $_POST['contact_label'];
-            $contact_details = array_map('sanitize_text_field', $_POST['contact_details']);
-            foreach ($contact_label as $key => $value) {
-               if ($value || $contact_details[$key]) {
-                  if ($contacts) {
-                     $contacts .= "####||||####";
-                  }
-                  $contacts .= "{$value}||||{$contact_details[$key]}";
-               }
-            }
+     
+         /*
+          * ---------------------------------------------------------
+          * Contact information
+          * ---------------------------------------------------------
+          *
+          * Stored format:
+          *
+          * Label||||Details####||||####Label||||Details
+          * ---------------------------------------------------------
+          */
+     
+         $contacts = '';
+     
+         if (
+             isset($_POST['contact_label'], $_POST['contact_details']) &&
+             is_array($_POST['contact_label']) &&
+             is_array($_POST['contact_details'])
+         ) {
+             $contact_labels  = wp_unslash($_POST['contact_label']);
+             $contact_details = wp_unslash($_POST['contact_details']);
+     
+             $contact_items = array();
+     
+             foreach ($contact_labels as $key => $label) {
+     
+                 $label = sanitize_text_field($label);
+     
+                 $details = isset($contact_details[$key])
+                     ? sanitize_text_field($contact_details[$key])
+                     : '';
+     
+                 if ('' === $label && '' === $details) {
+                     continue;
+                 }
+     
+                 $contact_items[] = $label . '||||' . $details;
+             }
+     
+             $contacts = implode(
+                 '####||||####',
+                 $contact_items
+             );
          }
-         $myData[11] = $contacts;
-         $myData[12] = sanitize_text_field($_POST['hover_image']);
-         $skills = "";
-         if (isset($_POST['skills_name']) && $_POST['skills_name']) {
-            $skills_name = array_map('sanitize_text_field', $_POST['skills_name']);
-            $skills_rating = array_map('sanitize_text_field', $_POST['skills_rating']);
-            if($skills_name){
-               foreach ($skills_name as $key => $value) {
-                  if (strlen($value) > 1) {
-                     if ($skills) {
-                        $skills .= "####||||####";
-                     }
-                     $skills .= "{$value}||||{$skills_rating[$key]}";
-                  }
-               }
-            }
+     
+         /*
+          * ---------------------------------------------------------
+          * Skills
+          * ---------------------------------------------------------
+          *
+          * Stored format:
+          *
+          * Skill||||Rating####||||####Skill||||Rating
+          * ---------------------------------------------------------
+          */
+     
+         $skills = '';
+     
+         if (
+             isset($_POST['skills_name'], $_POST['skills_rating']) &&
+             is_array($_POST['skills_name']) &&
+             is_array($_POST['skills_rating'])
+         ) {
+             $skill_names   = wp_unslash($_POST['skills_name']);
+             $skill_ratings = wp_unslash($_POST['skills_rating']);
+     
+             $skill_items = array();
+     
+             foreach ($skill_names as $key => $skill_name) {
+     
+                 $skill_name = sanitize_text_field($skill_name);
+     
+                 $skill_rating = isset($skill_ratings[$key])
+                     ? sanitize_text_field($skill_ratings[$key])
+                     : '';
+     
+                 if (strlen($skill_name) <= 1) {
+                     continue;
+                 }
+     
+                 $skill_items[] = $skill_name . '||||' . $skill_rating;
+             }
+     
+             $skills = implode(
+                 '####||||####',
+                 $skill_items
+             );
          }
-         $myData[13] = $skills;
-         $myData[14] = $post_id;
-         $myData[15] = sanitize_text_field($_POST['template_id']);
-         $myData[16] = sanitize_text_field($_POST['thumbnail']);
-
-         $wpdb->query($wpdb->prepare("INSERT INTO {$member_table} set
+     
+         /*
+          * ---------------------------------------------------------
+          * Template / Thumbnail / Status
+          * ---------------------------------------------------------
+          */
+     
+         $template_id = isset($_POST['template_id'])
+             ? absint(wp_unslash($_POST['template_id']))
+             : 0;
+     
+         $thumbnail = isset($_POST['thumbnail'])
+             ? esc_url_raw(wp_unslash($_POST['thumbnail']))
+             : '';
+     
+         $status = isset($_POST['status'])
+             ? absint(wp_unslash($_POST['status']))
+             : 0;
+     
+         /*
+          * ---------------------------------------------------------
+          * Update member
+          * ---------------------------------------------------------
+          */
+     
+         $updated = $wpdb->query(
+             $wpdb->prepare(
+                 "UPDATE {$member_table}
+                  SET
                      name = %s,
                      designation = %s,
                      profile_details_type = %d,
@@ -238,137 +1106,44 @@ $total_template = 3;
                      skills = %s,
                      post_id = %d,
                      template_id = %d,
-                     thumbnail = %s", $myData));
-   } else if (!empty($_POST['update']) && $_POST['update'] == 'Update') {
-        wpm_6310_validate_request('wpm_6310_nonce_update');
+                     thumbnail = %s,
+                     status = %d
+                  WHERE id = %d",
+                 $name,
+                 $designation,
+                 $profile_details_type,
+                 $profile_url,
+                 $open_new_tab,
+                 $profile_details,
+                 $effect,
+                 $image,
+                 $icon_ids,
+                 $icon_url,
+                 $category_list,
+                 $contacts,
+                 $hover_image,
+                 $skills,
+                 $post_id,
+                 $template_id,
+                 $thumbnail,
+                 $status,
+                 $id
+             )
+         );
      
-         $id = (int) sanitize_text_field($_POST['eid']);
-         $memberInfo = $wpdb->get_row($wpdb->prepare("SELECT * FROM $member_table WHERE id = %d ", $id), ARRAY_A);
-         if((int) $memberInfo['post_id']) {
-            $post_id = $memberInfo['post_id']; 
-         } else {
-            $new_post = array(
-               'post_title'    => sanitize_text_field($_POST['name']),
-               'post_content'  => 'Your post content goes here.',
-               'post_status'   => 'publish', // Publish the post immediately
-               'post_author'   => 1, // ID of the post author
-               'post_type'     => 'wpm_team', // Post type (you can use 'post', 'page', or any custom post type)
+         /*
+          * ---------------------------------------------------------
+          * Update category/member relationship
+          * ---------------------------------------------------------
+          */
+     
+         if (false !== $updated) {
+             wpm_6310_update_all_category_member_info(
+                 $id,
+                 $category_ids
              );
-             $post_id = wp_insert_post($new_post);
          }
-
-         $myData = array();
-         $myData[0] = sanitize_text_field($_POST['name']);
-         $myData[1] = sanitize_text_field($_POST['designation']);
-         $myData[2] = sanitize_text_field($_POST['pd']);
-         if ($myData[2] == 1) {
-            $myData[3] = sanitize_text_field($_POST['url']);
-            $myData[4] = sanitize_text_field($_POST['new_tab']);
-            $myData[5] = "";
-            $myData[6] = "";
-         } else if ($myData[2] == 2 || $myData[2] == 3) {
-            $myData[3] = "";
-            $myData[4] = "";
-            $myData[5] = $_POST['profile_details_new'];
-            $myData[6] = sanitize_text_field($_POST['effect']);
-         } else {
-            $myData[3] = "";
-            $myData[4] = "";
-            $myData[5] = "";
-            $myData[6] = "";
-         }
-         $myData[7] = sanitize_text_field($_POST['image']);
-
-         $iconIds = "";
-         $iconUrl = "";
-         if (isset($_POST['icon_link'], $_POST['icon_name']) && is_array($_POST['icon_link']) && is_array($_POST['icon_name'])) {
-            $icon_name = array_map('sanitize_text_field', $_POST['icon_name']);
-            $icon_link = array_map('sanitize_text_field', $_POST['icon_link']);
-            if ($icon_link) {
-               foreach ($icon_link as $dkey => $dvalue) {
-                  if ($dvalue) {
-                     if ($iconIds) {
-                        $iconIds .= ",";
-                        $iconUrl .= "||||";
-                     }
-                     $iconIds .= $icon_name[$dkey];
-                     $iconUrl .= $icon_link[$dkey];
-                  }
-               }
-            }
-         }
-         $myData[8] = $iconIds;
-         $myData[9] = $iconUrl;
-
-         $catList = "";
-         $catid = [];
-         if (isset($_POST['catid']) && $_POST['catid']) {
-            $catid = array_map('sanitize_text_field', $_POST['catid']);
-            foreach ($catid as $cat) {
-               if($catList){
-                  $catList .= " ";
-               }
-               $catList .= "{$cat}";
-            }
-         }
-         $myData[10] = $catList;
-         $contacts = "";
-         if (isset($_POST['contact_label']) && $_POST['contact_label']) {
-            $contact_label = $_POST['contact_label'];
-            $contact_details = array_map('sanitize_text_field', $_POST['contact_details']);
-            foreach ($contact_label as $key => $value) {
-               if ($value || $contact_details[$key]) {
-                  if ($contacts) {
-                     $contacts .= "####||||####";
-                  }
-                  $contacts .= "{$value}||||{$contact_details[$key]}";
-               }
-            }
-         }
-         $myData[11] = $contacts;
-         $myData[12] = sanitize_text_field($_POST['hover_image']);
-         $skills = "";
-         if (isset($_POST['skills_name']) && $_POST['skills_name']) {
-            $skills_name = array_map('sanitize_text_field', $_POST['skills_name']);
-            $skills_rating = array_map('sanitize_text_field', $_POST['skills_rating']);
-            if($skills_name){
-               foreach ($skills_name as $key => $value) {
-                  if (strlen($value) > 1) {
-                     if ($skills) {
-                        $skills .= "####||||####";
-                     }
-                     $skills .= "{$value}||||{$skills_rating[$key]}";
-                  }
-               }
-            }
-         }
-         $myData[13] = $skills;
-         $myData[14] = $post_id;
-         $myData[15] = sanitize_text_field($_POST['template_id']);
-         $myData[16] = sanitize_text_field($_POST['thumbnail']);
-         $myData[17] = $id;
-
-         $wpdb->query($wpdb->prepare("UPDATE {$member_table} set
-                           name = %s,
-                           designation = %s,
-                           profile_details_type = %d,
-                           profile_url = %s,
-                           open_new_tab = %d,
-                           profile_details = %s,
-                           effect = %s,
-                           image = %s,
-                           iconids = %s,
-                           iconurl = %s,
-                           category = %s,
-                           contact_info = %s,
-                           hover_image = %s,
-                           skills = %s,
-                           post_id = %d,
-                           template_id = %d,
-                           thumbnail = %s
-                           where id = %d", $myData));
-
-         wpm_6310_update_all_category_member_info($id, $catid);                  
+     }               
    } else if (!empty($_POST['edit']) && $_POST['edit'] == 'Edit') {
         wpm_6310_validate_request('wpm_nonce_field_edit');
       
@@ -471,7 +1246,7 @@ $total_template = 3;
                         <tr id="thumbnail-image-edit">
                            <td><label class="wpm-form-label" for="popup_app">Profile Page Image URL</label></td> 
                            <td>
-                              <input type="text" name="thumbnail" id="wpm-6310-thumbnail-src-edit" value="<?php echo $selMember['thumbnail'] ?>" class="wpm-form-input lg" >
+                              <input type="text" name="thumbnail" id="wpm-6310-thumbnail-src-edit" value="<?php echo esc_url($selMember['thumbnail']) ?>" class="wpm-form-input lg" >
                               <input type="button" id="wpm-6310-thumbnail-edit" value="Upload Image" class="wpm-btn-default" >
                            </td>
                         </tr>
@@ -658,15 +1433,22 @@ $total_template = 3;
                         <tr>
                            <td>Image URL</td> 
                            <td>
-                              <input type="text" name="image" id="wpm_6310_upload_team_member_image_src-edit" value="<?php echo $selMember['image'] ?>" class="wpm-form-input lg" >
+                              <input type="text" name="image" id="wpm_6310_upload_team_member_image_src-edit" value="<?php echo esc_url($selMember['image']) ?>" class="wpm-form-input lg" >
                               <input type="button" id="wpm_6310_upload_team_member_image-edit" value="Upload Image" class="wpm-btn-default" >
                            </td>
                         </tr>
                         <tr>
                            <td>Image Hover URL <span class="wpm-6310-pro">(Pro) <div class="wpm-6310-pro-text">This feature is available on the pro version only. You can view changes in the admin panel, not in the output.</div></span></td>
                            <td>
-                              <input type="text" name="hover_image" id="wpm_6310_upload_team_member_hover_image_src-edit" value="<?php echo $selMember['hover_image'] ?>" class="wpm-form-input lg" >
+                              <input type="text" name="hover_image" id="wpm_6310_upload_team_member_hover_image_src-edit" value="<?php echo esc_url($selMember['hover_image']) ?>" class="wpm-form-input lg" >
                               <input type="button" id="wpm_6310_upload_team_member_hover_image-edit" value="Upload Hover Image" class="wpm-btn-default" >
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>Member Status</td>
+                           <td>
+                              <input type="radio" name="status" value="1" checked>Active &nbsp;&nbsp;&nbsp;&nbsp;
+                              <input type="radio" name="status" value="0" <?php if($selMember['status'] == 0) echo 'checked'; ?>>Inactive
                            </td>
                         </tr>
                      </table>
@@ -1517,6 +2299,13 @@ else if (!empty($_POST['rearrange-icon']) && $_POST['rearrange-icon'] == 'Rearra
                   <td>
                      <input type="text" name="hover_image" id="wpm_6310_upload_team_member_hover_image_src" class="wpm-form-input lg" >
                      <input type="button" id="wpm_6310_upload_team_member_hover_image" value="Upload Hover Image" class="wpm-btn-default" >
+                  </td>
+               </tr>
+               <tr>
+                  <td>Member Status</td>
+                  <td>
+                     <input type="radio" name="status" value="1" checked>Active &nbsp;&nbsp;&nbsp;&nbsp;
+                     <input type="radio" name="status" value="0">Inactive
                   </td>
                </tr>
             </table>

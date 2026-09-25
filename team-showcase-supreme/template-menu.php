@@ -1,4 +1,6 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
 
 function wpm_template_01_10()
 {

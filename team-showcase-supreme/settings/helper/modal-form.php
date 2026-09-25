@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
 
 <div id="tab-11">
   <div class="row">

@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
 <div class="wpm_6310_modal-content">
   <span class="wpm-6310-close">&times;</span>
   <!-- Template 01 -->

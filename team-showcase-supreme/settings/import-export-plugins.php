@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH'))
+exit;
+?>
+
 <div class="wpm-6310">
    <h1>Plugin Import / Export</h1>
 

@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH'))
+exit;
+
 if (!empty($_POST['submit']) && $_POST['submit'] == 'Import >>') {
   wpm_6310_validate_request('wpm_nonce_field_import_demo_data');
 
