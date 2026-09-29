@@ -1,9 +1,7 @@
 <?php
 if (!defined('ABSPATH'))
 exit;
-?>
 
-<?php
 function wpm_6310_get_user_roles(){
 	if(!function_exists('wp_get_current_user')) {
 	include(ABSPATH . "wp-includes/pluggable.php");
