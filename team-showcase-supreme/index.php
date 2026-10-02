@@ -10,14 +10,14 @@
   Domain Path: /languages
   License:           GPL v2 or later
   License URI:       https://www.gnu.org/licenses/gpl-2.0.html
-  Version: 9.4
+  Version: 9.5
  */
 if (!defined('ABSPATH'))
    exit;
 
 define('wpm_6310_plugin_url', plugin_dir_path(__FILE__));
 define('wpm_6310_plugin_dir_url', plugin_dir_url(__FILE__));
-define('WPM_PLUGIN_CURRENT_VERSION', 9.4);
+define('WPM_PLUGIN_CURRENT_VERSION', 9.5);
 define('WPM_6310_PLUGIN_LANGUAGE_PATH', dirname(plugin_basename(__FILE__)) . '/languages');
 
 add_shortcode('wpm_team_showcase', 'wpm_team_showcase_supreme_shortcode');
@@ -284,16 +284,6 @@ function wpm_6310_myplugin_send_feedback()
 {
    $reason = sanitize_text_field($_POST['reason'] ?? '');
    $details = sanitize_textarea_field($_POST['details'] ?? '');
-   $admins = get_users([
-      'role' => 'administrator',
-   ]);
-
-   $admin_emails = [];
-
-   foreach ($admins as $admin) {
-      $admin_emails[] = $admin->user_email;
-   }
-   $admin_emails = implode(',', $admin_emails);
 
    $response = wp_remote_post(
       'https://demo.tcsesoft.com/plugin-feedback.php',
@@ -309,7 +299,6 @@ function wpm_6310_myplugin_send_feedback()
             'plugin_version' => WPM_PLUGIN_CURRENT_VERSION,
             'site_url'       => home_url(),
             'wp_version'     => get_bloginfo('version'),
-            'email'           => $admin_emails,
             'plugin_name'    => 'team'
          ])
       ]

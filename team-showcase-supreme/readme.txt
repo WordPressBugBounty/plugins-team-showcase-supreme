@@ -1,9 +1,9 @@
 === Team Members – Multi Language Supported Team Plugin ===
 Contributors: wpmart
 Tags: team members, team showcase, our team, staff directory, team slider
-Requires at least: 6.2
+Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 9.4
+Stable tag: 9.5
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -182,8 +182,11 @@ If You acquired the Team Showcase with Slider and have not received it, please j
 
 
 == Changelog ==
+= 9.5 =
+* FEATURE – Fixed data leak issue
+
 = 9.4 =
-* FEATURE – Fixed header error
+* FEATURE – Fixed CSS issue
 
 = 9.3 =
 * FEATURE – Fixed data leak issue
